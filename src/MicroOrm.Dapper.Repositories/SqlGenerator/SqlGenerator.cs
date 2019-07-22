@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 using MicroOrm.Dapper.Repositories.Attributes.Joins;
@@ -16,7 +17,8 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
     /// <inheritdoc />
     public partial class SqlGenerator<TEntity> : ISqlGenerator<TEntity>
         where TEntity : class
-    {
+    { 
+
         /// <inheritdoc />
         /// <summary>
         ///     Constructor
@@ -67,6 +69,15 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
         public SqlPropertyMetadata UpdatedAtPropertyMetadata { get; protected set; }
 
         /// <inheritdoc />
+        public bool HasCreatedAt => CreatedAtProperty != null;
+
+        /// <inheritdoc />
+        public PropertyInfo CreatedAtProperty { get; protected set; }
+
+        /// <inheritdoc />
+        public SqlPropertyMetadata CreatedAtPropertyMetadata { get; protected set; }
+
+        /// <inheritdoc />
         public bool IsIdentity => IdentitySqlProperty != null;
 
         /// <inheritdoc />
@@ -109,7 +120,10 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
                     ? SqlProperties.Where(p => !p.PropertyName.Equals(IdentitySqlProperty.PropertyName, StringComparison.OrdinalIgnoreCase))
                     : SqlProperties).ToList();
 
-            if (HasUpdatedAt)
+            if (HasCreatedAt && CreatedAtProperty.GetValue(entity) == null)
+                CreatedAtProperty.SetValue(entity, DateTime.UtcNow);
+
+            if (HasUpdatedAt && UpdatedAtProperty.GetValue(entity) == null)
                 UpdatedAtProperty.SetValue(entity, DateTime.UtcNow);
 
             var query = new SqlQuery(entity);
@@ -160,7 +174,10 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
 
             for (var i = 0; i < entitiesArray.Length; i++)
             {
-                if (HasUpdatedAt)
+                if (HasCreatedAt && CreatedAtProperty.GetValue(entitiesArray[i]) == null)
+                    CreatedAtProperty.SetValue(entitiesArray[i], DateTime.UtcNow);
+
+                if (HasUpdatedAt && UpdatedAtProperty.GetValue(entitiesArray[i]) == null)
                     UpdatedAtProperty.SetValue(entitiesArray[i], DateTime.UtcNow);
 
                 foreach (var property in properties)
@@ -197,7 +214,10 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
 
             for (var i = 0; i < entitiesArray.Length; i++)
             {
-                if (HasUpdatedAt)
+                if (HasCreatedAt && CreatedAtProperty.GetValue(entitiesArray[i]) == null)
+                    CreatedAtProperty.SetValue(entitiesArray[i], DateTime.UtcNow);
+
+                if (HasUpdatedAt && UpdatedAtProperty.GetValue(entitiesArray[i]) == null)
                     UpdatedAtProperty.SetValue(entitiesArray[i], DateTime.UtcNow);
 
                 if (i > 0)

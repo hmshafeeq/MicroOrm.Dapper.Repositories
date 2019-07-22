@@ -1,3 +1,6 @@
+using MicroOrm.Dapper.Repositories.Attributes;
+using MicroOrm.Dapper.Repositories.Attributes.Joins;
+using MicroOrm.Dapper.Repositories.Attributes.LogicalDelete;
 using System;  
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -26,13 +29,13 @@ namespace MicroOrm.Dapper.Console
         [Column("image_id")]
         public Guid? ImageId { get; set; }
 
-        [Column("created_at")]
+        [Column("created_at"), CreatedAt]
         public DateTime? CreatedAt { get; set; }
 
-        [Column("updated_at")]
+        [Column("updated_at"), UpdatedAt]
         public DateTime? UpdatedAt { get; set; }
 
-        [Column("deleted_at")]
+        [Column("deleted_at"), Status, Deleted]
         public DateTime? DeletedAt { get; set; } 
 
         [Column("synced_at")]
@@ -50,7 +53,7 @@ namespace MicroOrm.Dapper.Console
         }
 
 
-        [NotMapped]
+        [LeftJoin("items", "id", "category_id")]
         public IList<Item> Items { get; set; } = new List<Item>();
     }
 

@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using MicroOrm.Dapper.Repositories.SqlGenerator;
 
 namespace MicroOrm.Dapper.Repositories
@@ -9,6 +9,8 @@ namespace MicroOrm.Dapper.Repositories
     public partial class DapperRepository<TEntity> : IDapperRepository<TEntity>
         where TEntity : class
     {
+
+
         /// <summary>
         ///     Constructor
         /// </summary>
@@ -50,6 +52,17 @@ namespace MicroOrm.Dapper.Repositories
 
         /// <inheritdoc />
         public ISqlGenerator<TEntity> SqlGenerator { get; }
-        
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="log"></param>
+        /// <param name="methodName"></param>
+        internal void LogQuery<T>(string log, [System.Runtime.CompilerServices.CallerMemberName] string methodName = null)
+        { 
+            SqlGenerator.Config.LogQuery<T>(log, methodName);
+        }
+         
     }
 }

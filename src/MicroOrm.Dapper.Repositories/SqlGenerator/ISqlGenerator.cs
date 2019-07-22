@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -29,6 +29,16 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
         ///     Date of Changed Metadata Property
         /// </summary>
         SqlPropertyMetadata UpdatedAtPropertyMetadata { get; }
+
+
+        /// <inheritdoc />
+        bool HasCreatedAt { get; }
+
+        /// <inheritdoc />
+        PropertyInfo CreatedAtProperty { get; }
+
+        /// <inheritdoc />
+        SqlPropertyMetadata CreatedAtPropertyMetadata { get; }
 
         /// <summary>
         ///     Is Autoincrement table
@@ -84,7 +94,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
         ///     Logical delete Value
         /// </summary>
         object LogicalDeleteValue { get; }
-
+         
         /// <summary>
         ///     Get SQL for COUNT Query
         /// </summary>
@@ -141,7 +151,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
         ///     Get SQL for SELECT Query with BETWEEN
         /// </summary>
         SqlQuery GetSelectBetween(object from, object to, Expression<Func<TEntity, object>> btwField);
-        
+
         /// <summary>
         ///     Get SQL for SELECT Query with BETWEEN
         /// </summary>

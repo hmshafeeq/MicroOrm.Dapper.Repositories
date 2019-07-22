@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MicroOrm.Dapper.Repositories.Attributes.Joins;
 
 namespace MicroOrm.Dapper.Console
 {
@@ -79,6 +80,10 @@ namespace MicroOrm.Dapper.Console
 
         [NotMapped]
         public bool IsSelected => Count > 0;
+
+
+        [LeftJoin("Users", "UserId", "Id")]
+        public Category Category { get; set; }
     }
 
 

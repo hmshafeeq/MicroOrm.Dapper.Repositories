@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Reflection;
 using MicroOrm.Dapper.Repositories.Attributes.LogicalDelete;
@@ -19,7 +19,16 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
                 return;
             StatusPropertyName = statusProperty.ColumnName;
 
-            if (statusProperty.PropertyInfo.PropertyType.IsBool())
+            if (statusProperty.PropertyInfo.PropertyType.IsDateTime())
+            {
+                var deleteProperty = AllProperties.FirstOrDefault(p => p.GetCustomAttributes<DeletedAttribute>().Any());
+                if (deleteProperty == null)
+                    return;
+
+                LogicalDelete = true;
+                LogicalDeleteValue = $"'{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")}'"; // UTC Datetime
+            }
+            else if (statusProperty.PropertyInfo.PropertyType.IsBool())
             {
                 var deleteProperty = AllProperties.FirstOrDefault(p => p.GetCustomAttributes<DeletedAttribute>().Any());
                 if (deleteProperty == null)

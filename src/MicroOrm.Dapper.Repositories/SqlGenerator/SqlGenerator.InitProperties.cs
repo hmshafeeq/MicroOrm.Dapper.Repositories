@@ -46,6 +46,14 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
                 UpdatedAtProperty = props.FirstOrDefault(p => p.GetCustomAttributes<UpdatedAtAttribute>().Any());
                 UpdatedAtPropertyMetadata = new SqlPropertyMetadata(UpdatedAtProperty);
             }
+
+
+            var dateCreatedProperty = props.FirstOrDefault(p => p.GetCustomAttributes<CreatedAtAttribute>().Count() == 1);
+            if (dateCreatedProperty != null && (dateCreatedProperty.PropertyType == typeof(DateTime) || dateCreatedProperty.PropertyType == typeof(DateTime?)))
+            {
+                CreatedAtProperty = props.FirstOrDefault(p => p.GetCustomAttributes<CreatedAtAttribute>().Any());
+                CreatedAtPropertyMetadata = new SqlPropertyMetadata(CreatedAtProperty);
+            }
         }
     }
 }

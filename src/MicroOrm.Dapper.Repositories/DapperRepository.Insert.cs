@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,13 +13,13 @@ namespace MicroOrm.Dapper.Repositories
         where TEntity : class
     {
         /// <inheritdoc />
-        public virtual bool Insert(TEntity instance)
+        public virtual object Insert(TEntity instance)
         {
             return Insert(instance, null);
         }
 
         /// <inheritdoc />
-        public virtual bool Insert(TEntity instance, IDbTransaction transaction)
+        public virtual object Insert(TEntity instance, IDbTransaction transaction)
         {
             var queryResult = SqlGenerator.GetInsert(instance);
             if (SqlGenerator.IsIdentity)
@@ -27,17 +27,18 @@ namespace MicroOrm.Dapper.Repositories
                 var newId = Connection.Query<long>(queryResult.GetSql(), queryResult.Param, transaction).FirstOrDefault();
                 return SetValue(newId, instance);
             }
-            return Connection.Execute(queryResult.GetSql(), instance, transaction) > 0;
+
+            return Connection.Execute(queryResult.GetSql(), instance, transaction) > 0 ? GetLastInsertId(instance) : false;
         }
 
         /// <inheritdoc />
-        public virtual Task<bool> InsertAsync(TEntity instance)
+        public virtual Task<object> InsertAsync(TEntity instance)
         {
             return InsertAsync(instance, null);
         }
 
         /// <inheritdoc />
-        public virtual async Task<bool> InsertAsync(TEntity instance, IDbTransaction transaction)
+        public virtual async Task<object> InsertAsync(TEntity instance, IDbTransaction transaction)
         {
             var queryResult = SqlGenerator.GetInsert(instance);
             if (SqlGenerator.IsIdentity)
@@ -45,7 +46,7 @@ namespace MicroOrm.Dapper.Repositories
                 var newId = (await Connection.QueryAsync<long>(queryResult.GetSql(), queryResult.Param, transaction)).FirstOrDefault();
                 return SetValue(newId, instance);
             }
-            return await Connection.ExecuteAsync(queryResult.GetSql(), instance, transaction) > 0;
+            return await Connection.ExecuteAsync(queryResult.GetSql(), instance, transaction) > 0 ? GetLastInsertId(instance) : false; ;
         }
 
         private bool SetValue(long newId, TEntity instance)
@@ -57,6 +58,14 @@ namespace MicroOrm.Dapper.Repositories
                 SqlGenerator.IdentitySqlProperty.PropertyInfo.SetValue(instance, newParsedId);
             }
             return added;
+        }
+
+        private object GetLastInsertId(TEntity instance)
+        {
+            var keyProperty = SqlGenerator.KeySqlProperties.FirstOrDefault();
+            if (keyProperty != null)
+                return keyProperty.PropertyInfo.GetValue(instance);
+            return null;
         }
     }
 }

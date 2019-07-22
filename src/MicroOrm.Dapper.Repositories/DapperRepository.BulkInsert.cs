@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -43,6 +43,7 @@ namespace MicroOrm.Dapper.Repositories
                 }
             }
             var queryResult = SqlGenerator.GetBulkInsert(instances);
+            LogQuery<TEntity>(queryResult.GetSql());
             return Connection.Execute(queryResult.GetSql(), queryResult.Param, transaction);
         }
 
@@ -74,6 +75,7 @@ namespace MicroOrm.Dapper.Repositories
                 }
             }
             var queryResult = SqlGenerator.GetBulkInsert(instances);
+            LogQuery<TEntity>(queryResult.GetSql());
             return await Connection.ExecuteAsync(queryResult.GetSql(), queryResult.Param, transaction);
         }
     }

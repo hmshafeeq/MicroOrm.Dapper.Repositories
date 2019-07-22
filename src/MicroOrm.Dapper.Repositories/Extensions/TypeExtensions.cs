@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -59,5 +59,16 @@ namespace MicroOrm.Dapper.Repositories.Extensions
         {
             return type == typeof(bool);
         }
+
+        public static bool IsDateTime(this Type type)
+        {
+            return type == typeof(DateTime) || type == typeof(DateTime?);
+        }
+
+        public static bool IsGuid(this Type type)
+        {
+            return type == typeof(Guid) || type == typeof(Guid?);
+        }
+
     }
 }

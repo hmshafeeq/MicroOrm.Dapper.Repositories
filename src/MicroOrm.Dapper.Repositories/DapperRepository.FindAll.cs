@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq.Expressions;
@@ -24,6 +24,9 @@ namespace MicroOrm.Dapper.Repositories
         public virtual IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> predicate, IDbTransaction transaction = null)
         {
             var queryResult = SqlGenerator.GetSelectAll(predicate);
+
+            LogQuery<TEntity>(queryResult.GetSql());
+
             return Connection.Query<TEntity>(queryResult.GetSql(), queryResult.Param, transaction);
         }
         
@@ -37,6 +40,9 @@ namespace MicroOrm.Dapper.Repositories
         public virtual Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> predicate, IDbTransaction transaction = null)
         {
             var queryResult = SqlGenerator.GetSelectAll(predicate);
+
+            LogQuery<TEntity>(queryResult.GetSql());
+
             return Connection.QueryAsync<TEntity>(queryResult.GetSql(), queryResult.Param, transaction);
         }
     }

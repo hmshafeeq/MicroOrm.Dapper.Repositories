@@ -22,6 +22,7 @@ namespace MicroOrm.Dapper.Repositories
         ///     SQL Genetator
         /// </summary>
         ISqlGenerator<TEntity> SqlGenerator { get; }
+         
 
         /// <summary>
         ///     Get number of rows
@@ -536,22 +537,22 @@ namespace MicroOrm.Dapper.Repositories
         /// <summary>
         ///     Insert object to DB
         /// </summary>
-        bool Insert(TEntity instance);
+        object Insert(TEntity instance);
 
         /// <summary>
         ///     Insert object to DB
         /// </summary>
-        bool Insert(TEntity instance, IDbTransaction transaction);
+        object Insert(TEntity instance, IDbTransaction transaction);
 
         /// <summary>
         ///     Insert object to DB
         /// </summary>
-        Task<bool> InsertAsync(TEntity instance);
+        Task<object> InsertAsync(TEntity instance);
 
         /// <summary>
         ///     Insert object to DB
         /// </summary>
-        Task<bool> InsertAsync(TEntity instance, IDbTransaction transaction);
+        Task<object> InsertAsync(TEntity instance, IDbTransaction transaction);
 
         /// <summary>
         ///     Bulk Insert objects to DB
