@@ -110,7 +110,12 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
         /// <inheritdoc />
         public object LogicalDeleteValue { get; protected set; }
 
-        
+        /// <inheritdoc />
+        public PropertyInfo LogicalDeleteProperty { get; protected set; }
+
+        /// <inheritdoc />
+        public SqlPropertyMetadata LogicalDeletePropertyMetadata { get; protected set; }
+
 
         /// <inheritdoc />
         public virtual SqlQuery GetInsert(TEntity entity)

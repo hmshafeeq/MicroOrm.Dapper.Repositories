@@ -31,14 +31,24 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
                 dictionaryParams.AddRange(conditions);
 
                 if (LogicalDelete && queryType == QueryType.Select)
-                    sqlQuery.SqlBuilder.AppendFormat("({3}) AND {0}.{1} != {2} ", TableName, StatusPropertyName, LogicalDeleteValue, sqlBuilder);
+                {
+                    if (LogicalDeleteProperty != null && LogicalDeleteProperty.PropertyType.IsDateTime())
+                        sqlQuery.SqlBuilder.AppendFormat("({3}) AND {0}.{1} = {2} ", TableName, StatusPropertyName, "NULL", sqlBuilder);
+                    else
+                        sqlQuery.SqlBuilder.AppendFormat("({3}) AND {0}.{1} != {2} ", TableName, StatusPropertyName, LogicalDeleteValue, sqlBuilder);
+                }
                 else
                     sqlQuery.SqlBuilder.AppendFormat("{0} ", sqlBuilder);
             }
             else
             {
                 if (LogicalDelete && queryType == QueryType.Select)
-                    sqlQuery.SqlBuilder.AppendFormat("WHERE {0}.{1} != {2} ", TableName, StatusPropertyName, LogicalDeleteValue);
+                {
+                    if (LogicalDeleteProperty != null && LogicalDeleteProperty.PropertyType.IsDateTime())
+                        sqlQuery.SqlBuilder.AppendFormat("WHERE {0}.{1} = {2} ", TableName, StatusPropertyName, "NULL");
+                    else
+                        sqlQuery.SqlBuilder.AppendFormat("WHERE {0}.{1} != {2} ", TableName, StatusPropertyName, LogicalDeleteValue);
+                }
             }
 
             if (LogicalDelete && HasUpdatedAt && queryType == QueryType.Delete)
@@ -46,7 +56,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
 
             sqlQuery.SetParam(dictionaryParams);
         }
-        
+
         /// <summary>
         /// Build the final `query statement and parameters`
         /// </summary>
@@ -66,7 +76,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
                 {
                     if (sqlBuilder.Length > 0)
                         sqlBuilder.Append(" ");
-                    
+
                     sqlBuilder
                         .Append(expr.LinkingOperator)
                         .Append(" ");
@@ -95,7 +105,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
                         else
                         {
                             var vKey = string.Format("{0}_p{1}", qpExpr.PropertyName, qLevel); //Handle multiple uses of a field
-                            
+
                             sqlBuilder.AppendFormat("{0}.{1} {2} @{3}", tableName, columnName, qpExpr.QueryOperator, vKey);
                             conditions.Add(new KeyValuePair<string, object>(vKey, qpExpr.PropertyValue));
                         }
@@ -118,7 +128,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
                 }
             }
         }
-        
+
         /// <summary>
         /// Get query properties
         /// </summary>

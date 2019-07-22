@@ -27,7 +27,7 @@ namespace MicroOrm.Dapper.Console
             // Provide a callback to capture logs 
             // DommelMapper.LogReceived += log => logs.Add(log);
             #endregion
-          
+
             using (var conn = GetConnection())
             {
 
@@ -39,7 +39,8 @@ namespace MicroOrm.Dapper.Console
                     {
                         var watch = System.Diagnostics.Stopwatch.StartNew();
                         var id = Guid.Parse("81465fee-43e1-4294-bc6f-b74ce1ad0f33");
-                        var user = conn.Categories.Update(s => s.DeletedAt != null, new Category{ Published = 1 });
+                        var user = conn.Categories.FindAll();
+                        var user2 = conn.Items.FindAll();
                         watch.Stop();
 
                         System.Console.WriteLine(Convert.ToDecimal(watch.ElapsedMilliseconds) / 1000);

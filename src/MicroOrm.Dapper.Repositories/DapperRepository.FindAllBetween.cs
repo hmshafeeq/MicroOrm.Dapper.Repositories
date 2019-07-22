@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq.Expressions;
@@ -73,6 +73,9 @@ namespace MicroOrm.Dapper.Repositories
             IDbTransaction transaction)
         {
             var queryResult = SqlGenerator.GetSelectBetween(from, to, btwField, predicate);
+
+            LogQuery<TEntity>(queryResult.GetSql());
+
             return Connection.Query<TEntity>(queryResult.GetSql(), queryResult.Param, transaction);
         }
 
@@ -132,6 +135,9 @@ namespace MicroOrm.Dapper.Repositories
             IDbTransaction transaction)
         {
             var queryResult = SqlGenerator.GetSelectBetween(from, to, btwField, predicate);
+
+            LogQuery<TEntity>(queryResult.GetSql());
+
             return Connection.QueryAsync<TEntity>(queryResult.GetSql(), queryResult.Param, transaction);
         }
     }

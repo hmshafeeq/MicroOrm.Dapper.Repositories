@@ -19,6 +19,9 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
                 return;
             StatusPropertyName = statusProperty.ColumnName;
 
+            LogicalDeleteProperty = statusProperty.PropertyInfo;
+            LogicalDeletePropertyMetadata = statusProperty;
+
             if (statusProperty.PropertyInfo.PropertyType.IsDateTime())
             {
                 var deleteProperty = AllProperties.FirstOrDefault(p => p.GetCustomAttributes<DeletedAttribute>().Any());

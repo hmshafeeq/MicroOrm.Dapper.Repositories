@@ -19,6 +19,9 @@ namespace MicroOrm.Dapper.Repositories
         public virtual IEnumerable<TEntity> FindAll<TChild1>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, object>> tChild1, IDbTransaction transaction = null)
         {
             var queryResult = SqlGenerator.GetSelectAll(predicate, tChild1);
+
+            LogQuery<TEntity>(queryResult.GetSql());
+
             return ExecuteJoinQuery<TChild1, DontMap, DontMap, DontMap, DontMap, DontMap>(queryResult, transaction, tChild1);
         }
 

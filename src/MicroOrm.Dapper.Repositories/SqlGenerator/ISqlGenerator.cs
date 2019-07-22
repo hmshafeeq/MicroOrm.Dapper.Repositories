@@ -94,7 +94,13 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
         ///     Logical delete Value
         /// </summary>
         object LogicalDeleteValue { get; }
-         
+
+        /// <inheritdoc />
+        PropertyInfo LogicalDeleteProperty { get; }
+
+        /// <inheritdoc />
+        SqlPropertyMetadata LogicalDeletePropertyMetadata { get;  }
+
         /// <summary>
         ///     Get SQL for COUNT Query
         /// </summary>

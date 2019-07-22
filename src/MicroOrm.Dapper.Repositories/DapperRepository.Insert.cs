@@ -22,6 +22,9 @@ namespace MicroOrm.Dapper.Repositories
         public virtual object Insert(TEntity instance, IDbTransaction transaction)
         {
             var queryResult = SqlGenerator.GetInsert(instance);
+
+            LogQuery<TEntity>(queryResult.GetSql());
+
             if (SqlGenerator.IsIdentity)
             {
                 var newId = Connection.Query<long>(queryResult.GetSql(), queryResult.Param, transaction).FirstOrDefault();
@@ -41,6 +44,9 @@ namespace MicroOrm.Dapper.Repositories
         public virtual async Task<object> InsertAsync(TEntity instance, IDbTransaction transaction)
         {
             var queryResult = SqlGenerator.GetInsert(instance);
+
+            LogQuery<TEntity>(queryResult.GetSql());
+
             if (SqlGenerator.IsIdentity)
             {
                 var newId = (await Connection.QueryAsync<long>(queryResult.GetSql(), queryResult.Param, transaction)).FirstOrDefault();
