@@ -10,3 +10,4 @@ packages
 TestResults
 Coverage
 Coverage.xml
+/src/MicroOrm.Dapper.Console
