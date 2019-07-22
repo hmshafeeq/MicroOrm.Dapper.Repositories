@@ -587,12 +587,33 @@ namespace MicroOrm.Dapper.Repositories
         /// <summary>
         ///     Update object in DB
         /// </summary>
-        bool Update(TEntity instance);
-
+        bool Update(TEntity instance); 
         /// <summary>
         ///     Update object in DB
         /// </summary>
         bool Update(TEntity instance, IDbTransaction transaction);
+
+
+        /// <summary>
+        ///     Update object in DB
+        /// </summary>
+        bool Update(Expression<Func<TEntity, bool>> predicate, TEntity instance);
+
+        /// <summary>
+        ///     Update object in DB
+        /// </summary>
+        bool Update(Expression<Func<TEntity, bool>> predicate, object instance);
+         
+        /// <summary>
+        ///     Update object in DB
+        /// </summary>
+        bool Update(Expression<Func<TEntity, bool>> predicate, TEntity instance, IDbTransaction transaction);
+
+        /// <summary>
+        ///     Update object in DB
+        /// </summary>
+        bool Update(Expression<Func<TEntity, bool>> predicate, object instance, IDbTransaction transaction);
+
 
         /// <summary>
         ///     Update object in DB
@@ -607,22 +628,22 @@ namespace MicroOrm.Dapper.Repositories
         /// <summary>
         ///     Update object in DB
         /// </summary>
-        bool Update(Expression<Func<TEntity, bool>> predicate, TEntity instance);
-
-        /// <summary>
-        ///     Update object in DB
-        /// </summary>
-        bool Update(Expression<Func<TEntity, bool>> predicate, TEntity instance, IDbTransaction transaction);
-
-        /// <summary>
-        ///     Update object in DB
-        /// </summary>
         Task<bool> UpdateAsync(Expression<Func<TEntity, bool>> predicate, TEntity instance);
 
         /// <summary>
         ///     Update object in DB
         /// </summary>
+        Task<bool> UpdateAsync(Expression<Func<TEntity, bool>> predicate, object instance);
+
+        /// <summary>
+        ///     Update object in DB
+        /// </summary>
         Task<bool> UpdateAsync(Expression<Func<TEntity, bool>> predicate, TEntity instance, IDbTransaction transaction);
+
+        /// <summary>
+        ///     Update object in DB
+        /// </summary>
+        Task<bool> UpdateAsync(Expression<Func<TEntity, bool>> predicate, object instance, IDbTransaction transaction);
 
         /// <summary>
         ///     Bulk Update objects in DB

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-
+using MicroOrm.Dapper.Repositories.Extensions;
 namespace MicroOrm.Dapper.Repositories.SqlGenerator
 {
     /// <inheritdoc />
@@ -18,10 +18,10 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
                 .Append(" FROM ")
                 .Append(TableName)
                 .Append(" ");
-            
-            if (includes.Any())                  
+
+            if (includes.Any())
                 sqlQuery.SqlBuilder.Append(joinsBuilder);
-            
+
             AppendWherePredicateQuery(sqlQuery, predicate, QueryType.Select);
 
             if (firstOnly && (Config.SqlProvider == SqlProvider.MySQL || Config.SqlProvider == SqlProvider.PostgreSQL))
@@ -29,7 +29,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
 
             return sqlQuery;
         }
-        
+
         /// <inheritdoc />
         public virtual SqlQuery GetSelectFirst(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
         {
@@ -89,9 +89,9 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
                     .Append("AND ")
                     .Append(TableName)
                     .Append(".")
-                    .Append(StatusPropertyName)
-                    .Append(" != ")
-                    .Append(LogicalDeleteValue)
+                    .Append(LogicalDeletePropertyMetadata.ColumnName)
+                    .Append(LogicalDeleteProperty.PropertyType.IsDateTime() ? " = " : " != ")
+                    .Append(LogicalDeleteProperty.PropertyType.IsDateTime() ? "NULL" : GetLogicalDeleteValue())
                     .Append(" ");
 
             if (Config.SqlProvider == SqlProvider.MySQL || Config.SqlProvider == SqlProvider.PostgreSQL)
@@ -128,7 +128,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
 
             return query;
         }
-        
+
         private SqlQuery InitBuilderSelect(bool firstOnly)
         {
             var query = new SqlQuery();
@@ -140,7 +140,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
 
             return query;
         }
-        
+
         private static string GetFieldsSelect(string tableName, SqlPropertyMetadata[] properties)
         {
             //Projection function

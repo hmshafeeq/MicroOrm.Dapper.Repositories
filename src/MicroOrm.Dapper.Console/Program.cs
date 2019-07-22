@@ -33,14 +33,21 @@ namespace MicroOrm.Dapper.Console
 
                 try
                 {
-                    conn.Config.LogReceived += log => logs.Add(log);
+                    conn.Logger.Start();
 
                     //for (int i = 0; i < 10; i++)
                     {
                         var watch = System.Diagnostics.Stopwatch.StartNew();
-                        var id = Guid.Parse("81465fee-43e1-4294-bc6f-b74ce1ad0f33");
-                        var user = conn.Categories.FindAll();
-                        var user2 = conn.Items.FindAll();
+                        var id = Guid.Parse("d2fe6aa2-0e08-4e0e-95aa-88b2964da0f3");
+                        DateTime? date = null;
+                        var user = conn.Categories.InsertAsync(new Category
+                        {
+                            ButtonColor = "$33",
+                            Name = "123123"
+
+                        }); ; ;
+
+                       var user2 = conn.Categories.FindById(id);
                         watch.Stop();
 
                         System.Console.WriteLine(Convert.ToDecimal(watch.ElapsedMilliseconds) / 1000);
@@ -56,7 +63,7 @@ namespace MicroOrm.Dapper.Console
 
                 }
 
-                // var ddd = conn.UpdateAsync<Item>(new { Name = "Hello World",DescriptionShort = "Hello World" }, z => z.Quantity == 98);
+                System.Console.Write(string.Join("\r\n\r\n", conn.Logger.Logs));
 
 
             }

@@ -76,6 +76,11 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
         SqlJoinPropertyMetadata[] SqlJoinProperties { get; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        SqlPropertyMetadata[] StatusSqlProperties { get; }
+
+        /// <summary>
         ///     Config for queries
         /// </summary>
         SqlGeneratorConfig Config { get; }
@@ -84,17 +89,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
         ///     Has Logical delete
         /// </summary>
         bool LogicalDelete { get; }
-
-        /// <summary>
-        ///     PropertyName of Status
-        /// </summary>
-        string StatusPropertyName { get; }
-
-        /// <summary>
-        ///     Logical delete Value
-        /// </summary>
-        object LogicalDeleteValue { get; }
-
+          
         /// <inheritdoc />
         PropertyInfo LogicalDeleteProperty { get; }
 
@@ -127,6 +122,12 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
         ///     Get SQL for UPDATE Query
         /// </summary>
         SqlQuery GetUpdate(TEntity entity);
+
+        /// <summary>
+        ///     Get SQL for UPDATE Query
+        /// </summary>
+        SqlQuery GetUpdate(Expression<Func<TEntity, bool>> predicate, object entity);
+         
 
         /// <summary>
         ///     Get SQL for UPDATE Query

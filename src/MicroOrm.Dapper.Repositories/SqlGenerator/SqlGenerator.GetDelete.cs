@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
-
+using MicroOrm.Dapper.Repositories.Extensions;
 namespace MicroOrm.Dapper.Repositories.SqlGenerator
 {
     /// <inheritdoc />
@@ -12,7 +12,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
         public virtual SqlQuery GetDelete(TEntity entity)
         {
             var sqlQuery = new SqlQuery();
-            var whereAndSql = 
+            var whereAndSql =
                 string.Join(" AND ", KeySqlProperties.Select(p => string.Format("{0}.{1} = @{2}", TableName, p.ColumnName, p.PropertyName)));
 
             if (!LogicalDelete)
@@ -24,14 +24,14 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
                     .Append(whereAndSql);
             }
             else
-            {                
+            {
                 sqlQuery.SqlBuilder
                     .Append("UPDATE ")
                     .Append(TableName)
                     .Append(" SET ")
-                    .Append(StatusPropertyName)
+                    .Append(LogicalDeletePropertyMetadata.ColumnName)
                     .Append(" = ")
-                    .Append(LogicalDeleteValue);
+                    .Append(LogicalDeleteProperty.PropertyType.IsDateTime() ? $"'{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")}'" : GetLogicalDeleteValue());
 
                 if (HasUpdatedAt)
                 {
@@ -44,7 +44,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
                         .Append(UpdatedAtPropertyMetadata.PropertyName);
                 }
 
-                sqlQuery.SqlBuilder 
+                sqlQuery.SqlBuilder
                     .Append(" WHERE ")
                     .Append(whereAndSql);
             }
@@ -70,9 +70,9 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
                     .Append("UPDATE ")
                     .Append(TableName)
                     .Append(" SET ")
-                    .Append(StatusPropertyName)
+                    .Append(LogicalDeletePropertyMetadata.ColumnName)
                     .Append(" = ")
-                    .Append(LogicalDeleteValue);
+                    .Append(LogicalDeleteProperty.PropertyType.IsDateTime() ? $"'{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")}'" : GetLogicalDeleteValue());
 
                 if (HasUpdatedAt)
                     sqlQuery.SqlBuilder
@@ -81,11 +81,30 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
                         .Append(" = @")
                         .Append(UpdatedAtPropertyMetadata.PropertyName);
 
-               
+
             }
             sqlQuery.SqlBuilder.Append(" ");
             AppendWherePredicateQuery(sqlQuery, predicate, QueryType.Delete);
             return sqlQuery;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private object GetLogicalDeleteValue()
+        {
+            if (LogicalDeleteProperty.PropertyType.IsBool())
+            {
+                return 1;
+            }
+            else if (LogicalDeleteProperty.PropertyType.IsEnum())
+            {
+                var enumValue = Enum.Parse(LogicalDeleteProperty.PropertyType, LogicalDeleteProperty.Name);
+                return Convert.ChangeType(enumValue, Enum.GetUnderlyingType(LogicalDeleteProperty.PropertyType));
+            }
+
+            return null;
         }
     }
 }

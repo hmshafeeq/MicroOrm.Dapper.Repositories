@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using MicroOrm.Dapper.Repositories.Attributes;
 using MicroOrm.Dapper.Repositories.Attributes.Joins;
+using MicroOrm.Dapper.Repositories.Attributes.LogicalDelete;
 using MicroOrm.Dapper.Repositories.Extensions;
 
 namespace MicroOrm.Dapper.Repositories.SqlGenerator
@@ -35,6 +36,8 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
 
             // Filter key properties
             KeySqlProperties = props.Where(p => p.GetCustomAttributes<KeyAttribute>().Any()).Select(p => new SqlPropertyMetadata(p)).ToArray();
+
+            StatusSqlProperties = props.Where(p => p.GetCustomAttributes<StatusAttribute>().Any()).Select(p => new SqlPropertyMetadata(p)).ToArray();
 
             // Use identity as key pattern
             var identityProperty = props.FirstOrDefault(p => p.GetCustomAttributes<IdentityAttribute>().Any());

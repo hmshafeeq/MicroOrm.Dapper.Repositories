@@ -40,6 +40,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
             return query;
         }
 
+
         /// <inheritdoc />
         public virtual SqlQuery GetUpdate(Expression<Func<TEntity, bool>> predicate, TEntity entity)
         {
@@ -61,13 +62,57 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
 
             query.SqlBuilder
                 .Append(" ");
-            
+
             AppendWherePredicateQuery(query, predicate, QueryType.Update);
 
             var parameters = new Dictionary<string, object>();
             var entityType = entity.GetType();
             foreach (var property in properties)
                 parameters.Add(property.PropertyName, entityType.GetProperty(property.PropertyName).GetValue(entity, null));
+
+            if (query.Param is Dictionary<string, object> whereParam)
+                parameters.AddRange(whereParam);
+
+            query.SetParam(parameters);
+
+            return query;
+        }
+
+
+        /// <inheritdoc />
+        public virtual SqlQuery GetUpdate(Expression<Func<TEntity, bool>> predicate, object entity)
+        {
+
+            var objectProperties = entity.GetType().GetProperties().ToList();
+
+            var properties = SqlProperties.Where(p =>
+                !KeySqlProperties.Any(k => k.PropertyName.Equals(p.PropertyName, StringComparison.OrdinalIgnoreCase)) && !p.IgnoreUpdate)
+                .Where(s => objectProperties.Any(x => x.Name == s.PropertyName) || UpdatedAtProperty.Name == s.PropertyName).ToArray();
+             
+            var query = new SqlQuery(entity);
+
+            query.SqlBuilder
+                .Append("UPDATE ")
+                .Append(TableName)
+                .Append(" SET ");
+
+            query.SqlBuilder.Append(string.Join(", ", properties
+                .Select(p => string.Format("{0} = @{1}", p.ColumnName, p.PropertyName))));
+
+            query.SqlBuilder
+                .Append(" ");
+
+            AppendWherePredicateQuery(query, predicate, QueryType.Update);
+
+            var parameters = new Dictionary<string, object>();
+            var entityType = entity.GetType();
+            foreach (var property in properties)
+            {
+                if (property.PropertyName == UpdatedAtProperty.Name)
+                    parameters.Add(property.PropertyName, $"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")}");
+                else
+                    parameters.Add(property.PropertyName, entityType.GetProperty(property.PropertyName).GetValue(entity, null));
+            }
 
             if (query.Param is Dictionary<string, object> whereParam)
                 parameters.AddRange(whereParam);

@@ -1,4 +1,5 @@
 using System.Data;
+using MicroOrm.Dapper.Repositories.Logger;
 using MicroOrm.Dapper.Repositories.SqlGenerator;
 
 namespace MicroOrm.Dapper.Repositories
@@ -14,8 +15,9 @@ namespace MicroOrm.Dapper.Repositories
         /// <summary>
         ///     Constructor
         /// </summary>
-        public DapperRepository(IDbConnection connection)
+        public DapperRepository(IDbConnection connection, ILogger logger = null)
         {
+            Logger = logger;
             Connection = connection;
             SqlGenerator = new SqlGenerator<TEntity>(SqlProvider.MSSQL);
         }
@@ -23,17 +25,20 @@ namespace MicroOrm.Dapper.Repositories
         /// <summary>
         ///     Constructor
         /// </summary>
-        public DapperRepository(IDbConnection connection, SqlProvider sqlProvider)
+        public DapperRepository(IDbConnection connection, SqlProvider sqlProvider, ILogger logger = null)
         {
+            Logger = logger;
             Connection = connection;
             SqlGenerator = new SqlGenerator<TEntity>(sqlProvider);
+            
         }
 
         /// <summary>
         ///     Constructor
         /// </summary>
-        public DapperRepository(IDbConnection connection, ISqlGenerator<TEntity> sqlGenerator)
+        public DapperRepository(IDbConnection connection, ISqlGenerator<TEntity> sqlGenerator, ILogger logger = null)
         {
+            Logger = logger;
             Connection = connection;
             SqlGenerator = sqlGenerator;
         }
@@ -41,11 +46,15 @@ namespace MicroOrm.Dapper.Repositories
         /// <summary>
         ///     Constructor
         /// </summary>
-        public DapperRepository(IDbConnection connection, SqlGeneratorConfig config)
+        public DapperRepository(IDbConnection connection, SqlGeneratorConfig config, ILogger logger = null)
         {
-            Connection = connection;
+            Logger = logger;
+            Connection = connection; 
             SqlGenerator = new SqlGenerator<TEntity>(config);
         }
+
+        /// <inheritdoc />
+        public ILogger Logger { get; }
 
         /// <inheritdoc />
         public IDbConnection Connection { get; }
@@ -61,7 +70,7 @@ namespace MicroOrm.Dapper.Repositories
         /// <param name="methodName"></param>
         internal void LogQuery<T>(string log, [System.Runtime.CompilerServices.CallerMemberName] string methodName = null)
         { 
-            SqlGenerator.Config.LogQuery<T>(log, methodName);
+            Logger?.LogQuery<T>(log, methodName);
         }
          
     }

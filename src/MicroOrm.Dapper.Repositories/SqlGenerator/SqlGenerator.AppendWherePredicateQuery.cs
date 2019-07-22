@@ -32,10 +32,8 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
 
                 if (LogicalDelete && queryType == QueryType.Select)
                 {
-                    if (LogicalDeleteProperty != null && LogicalDeleteProperty.PropertyType.IsDateTime())
-                        sqlQuery.SqlBuilder.AppendFormat("({3}) AND {0}.{1} = {2} ", TableName, StatusPropertyName, "NULL", sqlBuilder);
-                    else
-                        sqlQuery.SqlBuilder.AppendFormat("({3}) AND {0}.{1} != {2} ", TableName, StatusPropertyName, LogicalDeleteValue, sqlBuilder);
+                    bool isDateTime = LogicalDeleteProperty.PropertyType.IsDateTime();
+                    sqlQuery.SqlBuilder.AppendFormat("({4}) AND {0}.{1} {2} {3} ", TableName, LogicalDeletePropertyMetadata.ColumnName, isDateTime ? "=" : "!=", isDateTime ? "NULL" : GetLogicalDeleteValue(), sqlBuilder);
                 }
                 else
                     sqlQuery.SqlBuilder.AppendFormat("{0} ", sqlBuilder);
@@ -44,15 +42,13 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
             {
                 if (LogicalDelete && queryType == QueryType.Select)
                 {
-                    if (LogicalDeleteProperty != null && LogicalDeleteProperty.PropertyType.IsDateTime())
-                        sqlQuery.SqlBuilder.AppendFormat("WHERE {0}.{1} = {2} ", TableName, StatusPropertyName, "NULL");
-                    else
-                        sqlQuery.SqlBuilder.AppendFormat("WHERE {0}.{1} != {2} ", TableName, StatusPropertyName, LogicalDeleteValue);
+                    bool isDateTime = LogicalDeleteProperty.PropertyType.IsDateTime();
+                    sqlQuery.SqlBuilder.AppendFormat("WHERE {0}.{1} = {2} ", TableName, LogicalDeletePropertyMetadata.ColumnName, isDateTime ? "NULL" : GetLogicalDeleteValue());
                 }
             }
 
             if (LogicalDelete && HasUpdatedAt && queryType == QueryType.Delete)
-                dictionaryParams.Add(UpdatedAtPropertyMetadata.ColumnName, DateTime.UtcNow);
+                dictionaryParams.Add(UpdatedAtPropertyMetadata.PropertyName, DateTime.UtcNow);
 
             sqlQuery.SetParam(dictionaryParams);
         }

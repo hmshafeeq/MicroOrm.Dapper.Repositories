@@ -20,6 +20,13 @@ namespace MicroOrm.Dapper.Repositories
         }
 
         /// <inheritdoc />
+        public virtual bool Update(Expression<Func<TEntity, bool>> predicate, object instance)
+        {
+            return Update(predicate, instance, null);
+        }
+
+        
+        /// <inheritdoc />
         public virtual bool Update(TEntity instance, IDbTransaction transaction)
         {
             var sqlQuery = SqlGenerator.GetUpdate(instance);
@@ -65,6 +72,17 @@ namespace MicroOrm.Dapper.Repositories
         }
 
         /// <inheritdoc />
+        public virtual bool Update(Expression<Func<TEntity, bool>> predicate, object instance, IDbTransaction transaction)
+        {
+            var sqlQuery = SqlGenerator.GetUpdate(predicate, instance);
+
+            LogQuery<TEntity>(sqlQuery.GetSql());
+
+            var updated = Connection.Execute(sqlQuery.GetSql(), sqlQuery.Param, transaction) > 0;
+            return updated;
+        }
+
+        /// <inheritdoc />
         public virtual Task<bool> UpdateAsync(Expression<Func<TEntity, bool>> predicate, TEntity instance)
         {
             return UpdateAsync(predicate, instance, null);
@@ -78,6 +96,28 @@ namespace MicroOrm.Dapper.Repositories
             LogQuery<TEntity>(sqlQuery.GetSql());
 
             var updated = await Connection.ExecuteAsync(sqlQuery.GetSql(), sqlQuery.Param, transaction) > 0;
+            return updated;
+        }
+
+
+        /// <inheritdoc />
+        public virtual async Task<bool> UpdateAsync(Expression<Func<TEntity, bool>> predicate, object instance, IDbTransaction transaction)
+        {
+            var sqlQuery = SqlGenerator.GetUpdate(predicate, instance);
+
+            LogQuery<TEntity>(sqlQuery.GetSql());
+
+            var updated = await Connection.ExecuteAsync(sqlQuery.GetSql(), sqlQuery.Param, transaction) > 0;
+            return updated;
+        }
+        /// <inheritdoc />
+        public async Task<bool> UpdateAsync(Expression<Func<TEntity, bool>> predicate, object instance)
+        {
+            var sqlQuery = SqlGenerator.GetUpdate(predicate, instance);
+
+            LogQuery<TEntity>(sqlQuery.GetSql());
+
+            var updated = await Connection.ExecuteAsync(sqlQuery.GetSql(), sqlQuery.Param) > 0;
             return updated;
         }
     }

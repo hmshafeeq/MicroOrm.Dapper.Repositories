@@ -17,7 +17,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
     /// <inheritdoc />
     public partial class SqlGenerator<TEntity> : ISqlGenerator<TEntity>
         where TEntity : class
-    { 
+    {
 
         /// <inheritdoc />
         /// <summary>
@@ -101,14 +101,14 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
         /// <inheritdoc />
         public SqlGeneratorConfig Config { get; protected set; }
 
-        /// <inheritdoc />
-        public bool LogicalDelete { get; protected set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public SqlPropertyMetadata[] StatusSqlProperties { get; protected set; }
 
         /// <inheritdoc />
-        public string StatusPropertyName { get; protected set; }
-
-        /// <inheritdoc />
-        public object LogicalDeleteValue { get; protected set; }
+        public bool LogicalDelete => LogicalDeleteProperty != null;
 
         /// <inheritdoc />
         public PropertyInfo LogicalDeleteProperty { get; protected set; }
@@ -199,7 +199,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
             return query;
         }
 
-      
+
 
         /// <inheritdoc />
         public virtual SqlQuery GetBulkUpdate(IEnumerable<TEntity> entities)

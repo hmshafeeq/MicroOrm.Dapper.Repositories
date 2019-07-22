@@ -12,46 +12,12 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
     {
         private void InitLogicalDeleted()
         {
-            var statusProperty =
-                SqlProperties.FirstOrDefault(x => x.PropertyInfo.GetCustomAttributes<StatusAttribute>().Any());
-
-            if (statusProperty == null)
+            var deleteProperty = SqlProperties.FirstOrDefault(p => p.PropertyInfo.GetCustomAttributes<DeletedAttribute>().Any());
+            if (deleteProperty == null)
                 return;
-            StatusPropertyName = statusProperty.ColumnName;
-
-            LogicalDeleteProperty = statusProperty.PropertyInfo;
-            LogicalDeletePropertyMetadata = statusProperty;
-
-            if (statusProperty.PropertyInfo.PropertyType.IsDateTime())
-            {
-                var deleteProperty = AllProperties.FirstOrDefault(p => p.GetCustomAttributes<DeletedAttribute>().Any());
-                if (deleteProperty == null)
-                    return;
-
-                LogicalDelete = true;
-                LogicalDeleteValue = $"'{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")}'"; // UTC Datetime
-            }
-            else if (statusProperty.PropertyInfo.PropertyType.IsBool())
-            {
-                var deleteProperty = AllProperties.FirstOrDefault(p => p.GetCustomAttributes<DeletedAttribute>().Any());
-                if (deleteProperty == null)
-                    return;
-
-                LogicalDelete = true;
-                LogicalDeleteValue = 1; // true
-            }
-            else if (statusProperty.PropertyInfo.PropertyType.IsEnum())
-            {
-                var deleteOption = statusProperty.PropertyInfo.PropertyType.GetFields().FirstOrDefault(f => f.GetCustomAttribute<DeletedAttribute>() != null);
-
-                if (deleteOption == null)
-                    return;
-
-                var enumValue = Enum.Parse(statusProperty.PropertyInfo.PropertyType, deleteOption.Name);
-                LogicalDeleteValue = Convert.ChangeType(enumValue, Enum.GetUnderlyingType(statusProperty.PropertyInfo.PropertyType));
-
-                LogicalDelete = true;
-            }
+             
+            LogicalDeleteProperty = deleteProperty.PropertyInfo;
+            LogicalDeletePropertyMetadata = deleteProperty; 
         }
     }
 }
