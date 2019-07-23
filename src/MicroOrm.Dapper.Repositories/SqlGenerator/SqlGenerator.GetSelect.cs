@@ -151,7 +151,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
                     : string.Format("{0}.{1}", tableName, p.ColumnName);
             }
 
-            return string.Join(", ", properties.Select(ProjectionFunction));
+            return string.Join(", ", properties.Where(s => !s.Ignore).Select(ProjectionFunction));
         }
     }
 }

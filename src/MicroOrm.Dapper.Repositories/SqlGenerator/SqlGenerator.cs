@@ -211,7 +211,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
             var entityType = entitiesArray[0].GetType();
 
             var properties = SqlProperties.Where(p =>
-                !KeySqlProperties.Any(k => k.PropertyName.Equals(p.PropertyName, StringComparison.OrdinalIgnoreCase)) && !p.IgnoreUpdate).ToArray();
+                !KeySqlProperties.Any(k => k.PropertyName.Equals(p.PropertyName, StringComparison.OrdinalIgnoreCase)) && !p.Ignore).ToArray();
 
             var query = new SqlQuery();
 
@@ -230,7 +230,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
 
                 query.SqlBuilder.Append(string.Format("UPDATE {0} SET {1} WHERE {2}", TableName,
                                                         string.Join(", ", properties.Select(p => string.Format("{0} = @{1}{2}", p.ColumnName, p.PropertyName, i))),
-                                                        string.Join(" AND ", KeySqlProperties.Where(p => !p.IgnoreUpdate)
+                                                        string.Join(" AND ", KeySqlProperties.Where(p => !p.Ignore)
                                                                                              .Select(p => string.Format("{0} = @{1}{2}", p.ColumnName, p.PropertyName, i)))
                                                     ));
 
@@ -238,7 +238,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
                 foreach (var property in properties)
                     parameters.Add(property.PropertyName + i, entityType.GetProperty(property.PropertyName).GetValue(entitiesArray[i], null));
 
-                foreach (var property in KeySqlProperties.Where(p => !p.IgnoreUpdate))
+                foreach (var property in KeySqlProperties.Where(p => !p.Ignore))
                     parameters.Add(property.PropertyName + i, entityType.GetProperty(property.PropertyName).GetValue(entitiesArray[i], null));
 
                 // ReSharper restore PossibleNullReferenceException

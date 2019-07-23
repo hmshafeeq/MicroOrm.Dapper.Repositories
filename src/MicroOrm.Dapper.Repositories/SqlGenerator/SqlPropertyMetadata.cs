@@ -25,9 +25,9 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
             {
                 ColumnName = PropertyInfo.Name;
             }
-            var ignoreUpdate = PropertyInfo.GetCustomAttribute<IgnoreUpdateAttribute>();
-            if (ignoreUpdate != null)
-                IgnoreUpdate = true;
+            var ignore = PropertyInfo.GetCustomAttribute<IgnoreAttribute>();
+            if (ignore != null)
+                Ignore = true;
         }
 
         /// <summary>
@@ -46,9 +46,9 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
         public string ColumnName { get; set; }
 
         /// <summary>
-        ///     Exclude property from update
+        ///     Exclude property 
         /// </summary>
-        public bool IgnoreUpdate { get; set; }
+        public bool Ignore { get; set; }
 
         /// <summary>
         ///     PropertyName

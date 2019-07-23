@@ -13,7 +13,7 @@ namespace MicroOrm.Dapper.Console
     {
 
 
-        private static string connectionString = $"Server=localhost;Port=3307;Database=client;Uid=root;Pwd=root;";
+        private static string connectionString = $"Server=localhost;Port=3306;Database=outerpos_lcc;Uid=root;Pwd=root;";
         static void Main(string[] args)
         {
 
@@ -40,14 +40,14 @@ namespace MicroOrm.Dapper.Console
                         var watch = System.Diagnostics.Stopwatch.StartNew();
                         var id = Guid.Parse("d2fe6aa2-0e08-4e0e-95aa-88b2964da0f3");
                         DateTime? date = null;
-                        var user = conn.Categories.InsertAsync(new Category
-                        {
-                            ButtonColor = "$33",
-                            Name = "123123"
+                        //var user = conn.Categories.InsertAsync(new Category
+                        //{
+                        //    ButtonColor = "$33",
+                        //    Name = "123123"
 
-                        }); ; ;
+                        //}); ; ;
 
-                       var user2 = conn.Categories.FindById(id);
+                       var user2 = conn.Categories.FindAll<Item>(s=>s.DeletedAt == null,x=>x.Items);
                         watch.Stop();
 
                         System.Console.WriteLine(Convert.ToDecimal(watch.ElapsedMilliseconds) / 1000);

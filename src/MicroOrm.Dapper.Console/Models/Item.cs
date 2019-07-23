@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MicroOrm.Dapper.Repositories.Attributes.Joins;
+using MicroOrm.Dapper.Repositories.Attributes;
 
 namespace MicroOrm.Dapper.Console
 {
@@ -78,7 +79,7 @@ namespace MicroOrm.Dapper.Console
         [NotMapped]
         public int Count { get; set; }
 
-        [NotMapped]
+        [Ignore]
         public bool IsSelected => Count > 0;
 
 

@@ -29,8 +29,10 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
                 BuildQuerySql(queryProperties, ref sqlBuilder, ref conditions, ref qLevel);
 
                 dictionaryParams.AddRange(conditions);
-
-                if (LogicalDelete && queryType == QueryType.Select)
+                 
+                // If logical delete enabled, query type is select, and logical delete property is not present in the given predicate
+                // then add a default where clause for filtering softdeleted rows
+                if (LogicalDelete && queryType == QueryType.Select && queryProperties.Cast<QueryParameterExpression>().ToList().Any(s => s.PropertyName != LogicalDeleteProperty.Name))
                 {
                     bool isDateTime = LogicalDeleteProperty.PropertyType.IsDateTime();
                     sqlQuery.SqlBuilder.AppendFormat("({4}) AND {0}.{1} {2} {3} ", TableName, LogicalDeletePropertyMetadata.ColumnName, isDateTime ? "=" : "!=", isDateTime ? "NULL" : GetLogicalDeleteValue(), sqlBuilder);

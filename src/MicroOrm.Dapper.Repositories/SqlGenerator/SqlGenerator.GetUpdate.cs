@@ -15,7 +15,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
         public virtual SqlQuery GetUpdate(TEntity entity)
         {
             var properties = SqlProperties.Where(p =>
-                !KeySqlProperties.Any(k => k.PropertyName.Equals(p.PropertyName, StringComparison.OrdinalIgnoreCase)) && !p.IgnoreUpdate).ToArray();
+                !KeySqlProperties.Any(k => k.PropertyName.Equals(p.PropertyName, StringComparison.OrdinalIgnoreCase)) && !p.Ignore).ToArray();
             if (!properties.Any())
                 throw new ArgumentException("Can't update without [Key]");
 
@@ -34,7 +34,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
 
             query.SqlBuilder.Append(" WHERE ");
 
-            query.SqlBuilder.Append(string.Join(" AND ", KeySqlProperties.Where(p => !p.IgnoreUpdate)
+            query.SqlBuilder.Append(string.Join(" AND ", KeySqlProperties.Where(p => !p.Ignore)
                 .Select(p => string.Format("{0} = @{1}", p.ColumnName, p.PropertyName))));
 
             return query;
@@ -45,7 +45,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
         public virtual SqlQuery GetUpdate(Expression<Func<TEntity, bool>> predicate, TEntity entity)
         {
             var properties = SqlProperties.Where(p =>
-                !KeySqlProperties.Any(k => k.PropertyName.Equals(p.PropertyName, StringComparison.OrdinalIgnoreCase)) && !p.IgnoreUpdate).ToArray();
+                !KeySqlProperties.Any(k => k.PropertyName.Equals(p.PropertyName, StringComparison.OrdinalIgnoreCase)) && !p.Ignore).ToArray();
 
             if (HasUpdatedAt)
                 UpdatedAtProperty.SetValue(entity, DateTime.UtcNow);
@@ -86,7 +86,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
             var objectProperties = entity.GetType().GetProperties().ToList();
 
             var properties = SqlProperties.Where(p =>
-                !KeySqlProperties.Any(k => k.PropertyName.Equals(p.PropertyName, StringComparison.OrdinalIgnoreCase)) && !p.IgnoreUpdate)
+                !KeySqlProperties.Any(k => k.PropertyName.Equals(p.PropertyName, StringComparison.OrdinalIgnoreCase)) && !p.Ignore)
                 .Where(s => objectProperties.Any(x => x.Name == s.PropertyName) || UpdatedAtProperty.Name == s.PropertyName).ToArray();
              
             var query = new SqlQuery(entity);
