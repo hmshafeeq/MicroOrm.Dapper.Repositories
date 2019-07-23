@@ -13,7 +13,7 @@ namespace MicroOrm.Dapper.Console
     {
 
 
-        private static string connectionString = $"Server=localhost;Port=3307;Database=client;Uid=root;Pwd=root;";
+        private static string connectionString = $"Server=localhost;Port=3306;Database=outerpos_lcc;Uid=root;Pwd=root;";
         static void Main(string[] args)
         {
 
@@ -33,7 +33,7 @@ namespace MicroOrm.Dapper.Console
 
                 try
                 {
-                  
+
                     conn.Logger.Start();
 
                     //for (int i = 0; i < 10; i++)
@@ -42,17 +42,19 @@ namespace MicroOrm.Dapper.Console
 
                         DateTime? date = null;
 
-                        var categories = conn.Categories.FindAll();
+                        var categories = conn.Categories.FindAll<Item>(x => x.CreatedAt >= DateTime.Parse("2019-02-07 13:01:56"), z => z.Items);
                         foreach (var item in categories)
                         {
                             item.DeletedAt = DateTime.UtcNow;
                         }
-                        using (var tran = conn.BeginTransaction())
-                        {
-                            var result = conn.Categories.BulkUpdate(categories,tran);
-                            
-                            tran.Commit();
-                        }
+
+                        System.Console.WriteLine(categories.Count().ToString() + " Items fetched");
+                        //using (var tran = conn.BeginTransaction())
+                        //{
+                        //    var result = conn.Categories.BulkUpdate(categories,tran);
+
+                        //    tran.Commit();
+                        //}
                         //Guid id = (Guid)conn.Categories.Insert(new Category
                         //{
                         //    ButtonColor = "$33",

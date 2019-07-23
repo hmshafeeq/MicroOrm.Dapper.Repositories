@@ -1,44 +1,151 @@
 # MicroOrm.Dapper.Repositories
 
-[![MyGet](https://img.shields.io/myget/phnx47-beta/vpre/MicroOrm.Dapper.Repositories.svg)](https://www.myget.org/feed/phnx47-beta/package/nuget/MicroOrm.Dapper.Repositories)
-[![NuGet](https://img.shields.io/nuget/v/MicroOrm.Dapper.Repositories.svg)](https://www.nuget.org/packages/MicroOrm.Dapper.Repositories)
-[![NuGet](https://img.shields.io/nuget/dt/MicroOrm.Dapper.Repositories.svg)](https://www.nuget.org/packages/MicroOrm.Dapper.Repositories)
-
-[![Build status](https://ci.appveyor.com/api/projects/status/5v68lbhwc9d4948g?svg=true)](https://ci.appveyor.com/project/phnx47/microorm-dapper-repositories)
-[![AppVeyor tests](https://img.shields.io/appveyor/tests/phnx47/microorm-dapper-repositories.svg)](https://ci.appveyor.com/project/phnx47/microorm-dapper-repositories/build/tests)
-[![GitHub contributors](https://img.shields.io/github/contributors/phnx47/MicroOrm.Dapper.Repositories.svg)](https://github.com/phnx47/MicroOrm.Dapper.Repositories/graphs/contributors)
-[![License MIT](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT) 
-
-
-## Installation
-
-
-    dotnet add package MicroOrm.Dapper.Repositories
+This is a fork of https://github.com/phnx47/MicroOrm.Dapper.Repositories repository.
 
 ## Docs
 
-Documentation in [GitHub Pages](http://dapper.phnx47.net)
+ 
+### Metadata attributes
 
-## Contributors
+[Key]
+From System.ComponentModel.DataAnnotations - Use for primary key.
 
-* [Sergey Kuznetsov](https://github.com/phnx47)
-* [Borys Iermakov](https://github.com/borisermakof)
-* [Other Community Contributors](https://github.com/phnx47/MicroOrm.Dapper.Repositories/graphs/contributors)
+[Identity]
+Use for identity key.
 
-## Contribute
+[Table]
+From System.ComponentModel.DataAnnotations.Schema - By default the database table name will match the model name but it can be overridden with this.
 
-Contributions to the package are always welcome!
+[Column]
+From System.ComponentModel.DataAnnotations.Schema - By default the column name will match the property name but it can be overridden with this.
 
-* Report any bugs or issues you find on the [issue tracker](https://github.com/phnx47/MicroOrm.Dapper.Repositories/issues).
-* You can grab the source code at the package's [git repository](https://github.com/phnx47/MicroOrm.Dapper.Repositories).
+[NotMapped] or [Ignore]
+From System.ComponentModel.DataAnnotations.Schema - For “logical” properties that do not have a corresponding column and have to be ignored by the SQL Generator.
 
-## Support
+[Deleted]
+For tables that implement “logical deletes” instead of physical deletes. Use this to decorate the datetime, bool or enum.
 
-If you are having problems, send a mail to [dapper@phnx47.net](mailto://dapper@phnx47.net). I will try to help you.
+[LeftJoin]  | [InnerJoin] | [RightJoin]
+Joins
 
-I would also very much appreciate your support by buying me a coffee.
+[CreatedAt] |  [UpdatedAt]
+Properties having any of these attributes will persist create and update timestamps accordingly. 
 
-<a href="https://www.buymeacoffee.com/phnx47" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
+[SyncStatus]
+Property having this attribute will be set to `null` or `0`  on each insert, update, delete. It will be set to `null` if property type is `DateTime`, else it will be set to `0`.
+Note : This attribute is only useful if you are building distributed system, where when ever some record is changed in client app, we want to mark it unsynced, so it can be sent to server in next call. 
+#### Disable Timestamps & Sync Status Tracking
+You can disable timestamp and sync status tracking from your `DbContext`
+implementation 
+```
+public class MySqlDbContext : DapperDbContext, IDbContext
+    {
+
+        private static ILogger _logger = new Logger();
+
+        private static readonly SqlGeneratorConfig _config = new SqlGeneratorConfig
+        {
+            SqlProvider = SqlProvider.MySQL,
+            UseQuotationMarks = true,
+            TrackTimeStamps = false,
+            TrackSyncStatus = false
+        };
+}
+```
+
+
+
+Notes
+
+    By default the SQL Generator is going to map the POCO name with the table name, and each public property to a column.
+    If the [Deleted] is used on a certain POCO, the sentence will be an update instead of a delete.
+    Supports complex primary keys.
+    Supports simple Joins.
+
+### Examples
+
+“Users” POCO:
+```
+[Table("Users")]
+public class User
+{
+    [Key, Identity]
+    public int Id { get; set; }
+
+    public string ReadOnly => "test"; // because don't have set
+
+    public string Name { get; set; }
+
+    public int AddressId { get; set; }
+
+    [LeftJoin("Cars", "Id", "UserId")]
+    public List<Car> Cars { get; set; }
+
+    [LeftJoin("Addresses", "AddressId", "Id")]
+    public Address Address { get; set; }
+
+    [Status, Deleted]
+    public bool Deleted { get; set; }
+
+    [UpdatedAt]
+    public DateTime? UpdatedAt { get; set; }
+}
+```
+
+“Cars” POCO:
+```
+[Table("Cars")]
+public class Car
+{
+    [Key, Identity]
+    public int Id { get; set; }
+
+    public string Name { get; set; }
+
+    public byte[] Data { get; set; }
+
+    public int UserId { get; set; }
+
+    [LeftJoin("Users", "UserId", "Id")]
+    public User User { get; set; }
+
+    [Status]
+    public StatusCar Status { get; set; }
+}
+
+public enum StatusCar
+{
+    Inactive = 0,
+
+    Active = 1,
+
+    [Deleted]
+    Deleted = -1
+}
+```
+
+Implements the repository:
+
+```
+public class UserRepository : DapperRepository<User>
+{
+
+    public UserRepository(IDbConnection connection, ISqlGenerator<User> sqlGenerator)
+        : base(connection, sqlGenerator)
+    {
+
+
+    }
+}
+```
+Query:
+
+```
+var user = await userRepository.FindAsync(x => x.Id == 5);
+
+var allUsers = await userRepository.FindAllAsync(x => x.AccountId == 3 && x.Deleted != false); // all users for acco
+```
+
 
 ## License
 
