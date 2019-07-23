@@ -1,6 +1,6 @@
 # MicroOrm.Dapper.Repositories
 
-This is a fork of https://github.com/phnx47/MicroOrm.Dapper.Repositories repository.
+This is a fork of https://github.com/phnx47/MicroOrm.Dapper.Repositories.
 All credit goes to [Sergey Kuznetsov](https://github.com/phnx47)
 
 ## Docs
@@ -15,31 +15,24 @@ From System.ComponentModel.DataAnnotations - Use for primary key.
 Use for identity key.
 
 [Table]
-
 From System.ComponentModel.DataAnnotations.Schema - By default the database table name will match the model name but it can be overridden with this.
 
 [Column]
-
 From System.ComponentModel.DataAnnotations.Schema - By default the column name will match the property name but it can be overridden with this.
 
 [NotMapped] or [Ignore]
-
 From System.ComponentModel.DataAnnotations.Schema - For “logical” properties that do not have a corresponding column and have to be ignored by the SQL Generator.
 
 [Deleted]
-
 For tables that implement “logical deletes” instead of physical deletes. Use this to decorate the datetime, bool or enum.
 
 [LeftJoin]  | [InnerJoin] | [RightJoin]
-
 Joins
 
 [CreatedAt] |  [UpdatedAt]
-
 Properties having any of these attributes will persist create and update timestamps accordingly. 
 
 [SyncStatus]
-
 Property having this attribute will be set to `null` or `0`  on each insert, update, delete. It will be set to `null` if property type is `DateTime`, else it will be set to `0`.
 Note : This attribute is only useful if you are building distributed system, where when ever some record is changed in client app, we want to mark it unsynced, so it can be sent to server in next call. 
 #### Disable Timestamps & Sync Status Tracking
@@ -63,17 +56,10 @@ public class MySqlDbContext : DapperDbContext, IDbContext
 
 
 
-Notes
-
-    By default the SQL Generator is going to map the POCO name with the table name, and each public property to a column.
-    If the [Deleted] is used on a certain POCO, the sentence will be an update instead of a delete.
-    Supports complex primary keys.
-    Supports simple Joins.
-
 ### Examples
 
 “Users” POCO:
-```
+```c#
 [Table("Users")]
 public class User
 {
@@ -101,7 +87,7 @@ public class User
 ```
 
 “Cars” POCO:
-```
+```c#
 [Table("Cars")]
 public class Car
 {
@@ -121,7 +107,7 @@ public class Car
  
 ```
 “Addresses” POCO:
-```
+```c#
 [Table("Addresses")]
 public class Address
 {
@@ -142,7 +128,7 @@ public class Address
 ```
 Implements the DBContext for your models:
 
-```
+```c#
     public class MySqlDbContext : DapperDbContext, IDbContext
     {
 
@@ -183,7 +169,7 @@ Implements the DBContext for your models:
 ```
 ##### Usage:
 
-```
+```c#
 
  if(var _db =  new MySqlDbContext(connectionString))
  {
@@ -204,12 +190,12 @@ You can explore in the [tests](https://github.com/hmshafeeq/MicroOrm.Dapper.Repo
 There are are three changes in this fork,
 1. Insert method will return an  object instead of int 
 2. Added an update method for the specific fields. 
-```
+```c#
   _db.Users.Update(x=>x.Id = 1, new { Name = "Mr. Sergey test" });
   
 ```
 3. Added a very basic logging, to get list of executed queries
-```
+```c#
 using (var conn = GetConnection())
 {
     conn.Logger.Start();
@@ -220,7 +206,7 @@ using (var conn = GetConnection())
 
     // conn.Logger.Logs will contain the list of queries executed;	
 }
-
+```
 
 ## License
 
