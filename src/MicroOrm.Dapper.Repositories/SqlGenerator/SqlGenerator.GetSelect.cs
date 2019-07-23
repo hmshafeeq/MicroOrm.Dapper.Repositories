@@ -90,7 +90,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
                     .Append(TableName)
                     .Append(".")
                     .Append(LogicalDeletePropertyMetadata.ColumnName)
-                    .Append(LogicalDeleteProperty.PropertyType.IsDateTime() ? " = " : " != ")
+                    .Append(LogicalDeleteProperty.PropertyType.IsDateTime() ? " IS " : " != ")
                     .Append(LogicalDeleteProperty.PropertyType.IsDateTime() ? "NULL" : GetLogicalDeleteValue())
                     .Append(" ");
 

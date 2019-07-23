@@ -35,10 +35,10 @@ namespace MicroOrm.Dapper.Console
         [Column("updated_at"), UpdatedAt]
         public DateTime? UpdatedAt { get; set; }
 
-        [Column("deleted_at"), Status, Deleted]
+        [Column("deleted_at"), Deleted]
         public DateTime? DeletedAt { get; set; } 
 
-        [Column("synced_at")]
+        [Column("synced_at"), SyncStatus]
         public DateTime? SyncedAt { get; set; }
 
         public override string ToString()

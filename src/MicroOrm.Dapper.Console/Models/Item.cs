@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MicroOrm.Dapper.Repositories.Attributes.Joins;
 using MicroOrm.Dapper.Repositories.Attributes;
+using MicroOrm.Dapper.Repositories.Attributes.LogicalDelete;
 
 namespace MicroOrm.Dapper.Console
 {
@@ -65,10 +66,10 @@ namespace MicroOrm.Dapper.Console
         [Column("updated_at")]
         public DateTime? UpdatedAt { get; set; }
 
-        [Column("deleted_at")]
+        [Column("deleted_at"), Deleted]
         public DateTime? DeletedAt { get; set; }
 
-        [Column("synced_at")]
+        [Column("synced_at"), SyncStatus]
         public DateTime? SyncedAt { get; set; }
 
         public override string ToString()

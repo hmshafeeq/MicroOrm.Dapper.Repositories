@@ -50,6 +50,9 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
             if (HasUpdatedAt)
                 UpdatedAtProperty.SetValue(entity, DateTime.UtcNow);
 
+            if (TrackSyncStatus)
+                SyncStatusProperty.SetValue(entity, SyncStatusProperty.PropertyType.IsDateTime() ? null : "0");
+
             var query = new SqlQuery(entity);
 
             query.SqlBuilder
@@ -87,8 +90,9 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
 
             var properties = SqlProperties.Where(p =>
                 !KeySqlProperties.Any(k => k.PropertyName.Equals(p.PropertyName, StringComparison.OrdinalIgnoreCase)) && !p.Ignore)
-                .Where(s => objectProperties.Any(x => x.Name == s.PropertyName) || UpdatedAtProperty.Name == s.PropertyName).ToArray();
-             
+                .Where(s => objectProperties.Any(x => x.Name == s.PropertyName) || (HasUpdatedAt && UpdatedAtProperty.Name == s.PropertyName) || (TrackSyncStatus && SyncStatusProperty.Name == s.PropertyName))
+                .ToArray();
+
             var query = new SqlQuery(entity);
 
             query.SqlBuilder
@@ -110,6 +114,8 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
             {
                 if (property.PropertyName == UpdatedAtProperty.Name)
                     parameters.Add(property.PropertyName, $"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")}");
+                else if (property.PropertyName == SyncStatusProperty.Name)
+                    parameters.Add(property.PropertyName, SyncStatusProperty.PropertyType.IsDateTime() ? null : "0");
                 else
                     parameters.Add(property.PropertyName, entityType.GetProperty(property.PropertyName).GetValue(entity, null));
             }

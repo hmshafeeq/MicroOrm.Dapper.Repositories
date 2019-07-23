@@ -13,7 +13,7 @@ namespace MicroOrm.Dapper.Console
     {
 
 
-        private static string connectionString = $"Server=localhost;Port=3306;Database=outerpos_lcc;Uid=root;Pwd=root;";
+        private static string connectionString = $"Server=localhost;Port=3307;Database=client;Uid=root;Pwd=root;";
         static void Main(string[] args)
         {
 
@@ -33,22 +33,47 @@ namespace MicroOrm.Dapper.Console
 
                 try
                 {
+                  
                     conn.Logger.Start();
 
                     //for (int i = 0; i < 10; i++)
                     {
                         var watch = System.Diagnostics.Stopwatch.StartNew();
-                        var id = Guid.Parse("d2fe6aa2-0e08-4e0e-95aa-88b2964da0f3");
+
                         DateTime? date = null;
-                        //var user = conn.Categories.InsertAsync(new Category
+
+                        var categories = conn.Categories.FindAll();
+                        foreach (var item in categories)
+                        {
+                            item.DeletedAt = DateTime.UtcNow;
+                        }
+                        using (var tran = conn.BeginTransaction())
+                        {
+                            var result = conn.Categories.BulkUpdate(categories,tran);
+                            
+                            tran.Commit();
+                        }
+                        //Guid id = (Guid)conn.Categories.Insert(new Category
                         //{
                         //    ButtonColor = "$33",
                         //    Name = "123123"
 
-                        //}); ; ;
+                        //});
 
-                       var user2 = conn.Categories.FindAll<Item>(s=>s.DeletedAt == null,x=>x.Items);
-                        watch.Stop();
+                        //System.Console.WriteLine("Item added");
+
+                        //var category = conn.Categories.FindById(id);
+
+                        //System.Console.WriteLine("Item fetched");
+
+                        //category.DeletedAt = null;
+                        //category.SyncedAt = DateTime.UtcNow;
+                        //conn.Categories.Update(category);
+                        //System.Console.WriteLine("Item updated");
+
+                        //conn.Categories.Delete(category);
+                        //System.Console.WriteLine("Item deleted");
+                        //watch.Stop();
 
                         System.Console.WriteLine(Convert.ToDecimal(watch.ElapsedMilliseconds) / 1000);
 

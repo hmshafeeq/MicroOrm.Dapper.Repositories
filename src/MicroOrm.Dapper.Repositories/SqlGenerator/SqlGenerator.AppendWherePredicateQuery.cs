@@ -35,7 +35,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
                 if (LogicalDelete && queryType == QueryType.Select && queryProperties.Cast<QueryParameterExpression>().ToList().Any(s => s.PropertyName != LogicalDeleteProperty.Name))
                 {
                     bool isDateTime = LogicalDeleteProperty.PropertyType.IsDateTime();
-                    sqlQuery.SqlBuilder.AppendFormat("({4}) AND {0}.{1} {2} {3} ", TableName, LogicalDeletePropertyMetadata.ColumnName, isDateTime ? "=" : "!=", isDateTime ? "NULL" : GetLogicalDeleteValue(), sqlBuilder);
+                    sqlQuery.SqlBuilder.AppendFormat("({4}) AND {0}.{1} {2} {3} ", TableName, LogicalDeletePropertyMetadata.ColumnName, isDateTime ? "IS" : "!=", isDateTime ? "NULL" : GetLogicalDeleteValue(), sqlBuilder);
                 }
                 else
                     sqlQuery.SqlBuilder.AppendFormat("{0} ", sqlBuilder);
@@ -45,7 +45,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
                 if (LogicalDelete && queryType == QueryType.Select)
                 {
                     bool isDateTime = LogicalDeleteProperty.PropertyType.IsDateTime();
-                    sqlQuery.SqlBuilder.AppendFormat("WHERE {0}.{1} = {2} ", TableName, LogicalDeletePropertyMetadata.ColumnName, isDateTime ? "NULL" : GetLogicalDeleteValue());
+                    sqlQuery.SqlBuilder.AppendFormat("WHERE {0}.{1} {2} {3} ", TableName, LogicalDeletePropertyMetadata.ColumnName, isDateTime ? "IS" : "!=", isDateTime ? "NULL" : GetLogicalDeleteValue());
                 }
             }
 

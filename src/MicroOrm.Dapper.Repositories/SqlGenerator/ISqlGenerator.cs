@@ -74,11 +74,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
         ///     Metadata sql join properties
         /// </summary>
         SqlJoinPropertyMetadata[] SqlJoinProperties { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        SqlPropertyMetadata[] StatusSqlProperties { get; }
+         
 
         /// <summary>
         ///     Config for queries
@@ -95,6 +91,9 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
 
         /// <inheritdoc />
         SqlPropertyMetadata LogicalDeletePropertyMetadata { get;  }
+
+        /// <inheritdoc />
+        bool TrackSyncStatus { get; }
 
         /// <summary>
         ///     Get SQL for COUNT Query

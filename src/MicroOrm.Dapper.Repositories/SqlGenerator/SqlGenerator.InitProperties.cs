@@ -37,11 +37,10 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
             // Filter key properties
             KeySqlProperties = props.Where(p => p.GetCustomAttributes<KeyAttribute>().Any()).Select(p => new SqlPropertyMetadata(p)).ToArray();
 
-            StatusSqlProperties = props.Where(p => p.GetCustomAttributes<StatusAttribute>().Any()).Select(p => new SqlPropertyMetadata(p)).ToArray();
-
             // Use identity as key pattern
             var identityProperty = props.FirstOrDefault(p => p.GetCustomAttributes<IdentityAttribute>().Any());
             IdentitySqlProperty = identityProperty != null ? new SqlPropertyMetadata(identityProperty) : null;
+
 
             var dateChangedProperty = props.FirstOrDefault(p => p.GetCustomAttributes<UpdatedAtAttribute>().Count() == 1);
             if (dateChangedProperty != null && (dateChangedProperty.PropertyType == typeof(DateTime) || dateChangedProperty.PropertyType == typeof(DateTime?)))
@@ -56,6 +55,14 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
             {
                 CreatedAtProperty = props.FirstOrDefault(p => p.GetCustomAttributes<CreatedAtAttribute>().Any());
                 CreatedAtPropertyMetadata = new SqlPropertyMetadata(CreatedAtProperty);
+            }
+
+
+            var syncStatusProperty = props.FirstOrDefault(p => p.GetCustomAttributes<SyncStatusAttribute>().Count() == 1);
+            if (syncStatusProperty != null)
+            {
+                SyncStatusProperty = props.FirstOrDefault(p => p.GetCustomAttributes<SyncStatusAttribute>().Any());
+                SyncStatusPropertyMetadata = new SqlPropertyMetadata(SyncStatusProperty);
             }
         }
     }
