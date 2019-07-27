@@ -1,4 +1,4 @@
-using System.Data;
+using System.Data; 
 using MicroOrm.Dapper.Repositories.Logger;
 using MicroOrm.Dapper.Repositories.SqlGenerator;
 
@@ -30,7 +30,7 @@ namespace MicroOrm.Dapper.Repositories
             Logger = logger;
             Connection = connection;
             SqlGenerator = new SqlGenerator<TEntity>(sqlProvider);
-            
+
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace MicroOrm.Dapper.Repositories
         public DapperRepository(IDbConnection connection, SqlGeneratorConfig config, ILogger logger = null)
         {
             Logger = logger;
-            Connection = connection; 
+            Connection = connection;
             SqlGenerator = new SqlGenerator<TEntity>(config);
         }
 
@@ -66,12 +66,23 @@ namespace MicroOrm.Dapper.Repositories
         /// 
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="log"></param>
+        /// <param name="sqlQuery"></param>
         /// <param name="methodName"></param>
-        internal void LogQuery<T>(string log, [System.Runtime.CompilerServices.CallerMemberName] string methodName = null)
-        { 
-            Logger?.LogQuery<T>(log, methodName);
+        internal void LogQuery<T>(SqlQuery sqlQuery, [System.Runtime.CompilerServices.CallerMemberName] string methodName = null)
+        {
+            if (Logger?.LogReceived != null)
+            { 
+                string paramss = "TinyJsonSerializer could not serialize query parameters.";
+                try
+                {
+                    paramss = TinyJsonSerializer.Serialize(sqlQuery.Param);   
+                }
+                catch (System.Exception) { }
+
+                Logger?.LogQuery<T>($"{sqlQuery.GetSql()}\r\nClient Timestamp : {System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}\r\nParameters : {paramss}", methodName);
+            }
+
         }
-         
+
     }
 }

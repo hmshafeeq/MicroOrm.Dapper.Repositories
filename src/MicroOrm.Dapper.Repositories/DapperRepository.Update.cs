@@ -31,10 +31,9 @@ namespace MicroOrm.Dapper.Repositories
         {
             var sqlQuery = SqlGenerator.GetUpdate(instance);
 
-            LogQuery<TEntity>(sqlQuery.GetSql());
-
-            var updated = Connection.Execute(sqlQuery.GetSql(), instance, transaction) > 0;
-            return updated;
+            LogQuery<TEntity>(sqlQuery);
+             
+            return Connection.Execute(sqlQuery.GetSql(), instance, transaction) > 0;
         }
 
         /// <inheritdoc />
@@ -48,10 +47,9 @@ namespace MicroOrm.Dapper.Repositories
         {
             var sqlQuery = SqlGenerator.GetUpdate(instance);
 
-            LogQuery<TEntity>(sqlQuery.GetSql());
-
-            var updated = await Connection.ExecuteAsync(sqlQuery.GetSql(), instance, transaction) > 0;
-            return updated;
+            LogQuery<TEntity>(sqlQuery);
+             
+            return await Connection.ExecuteAsync(sqlQuery.GetSql(), instance, transaction) > 0;
         }
 
         /// <inheritdoc />
@@ -65,10 +63,9 @@ namespace MicroOrm.Dapper.Repositories
         {
             var sqlQuery = SqlGenerator.GetUpdate(predicate, instance);
 
-            LogQuery<TEntity>(sqlQuery.GetSql());
-
-            var updated = Connection.Execute(sqlQuery.GetSql(), sqlQuery.Param, transaction) > 0;
-            return updated;
+            LogQuery<TEntity>(sqlQuery);
+             
+            return Connection.Execute(sqlQuery.GetSql(), sqlQuery.Param, transaction) > 0;
         }
 
         /// <inheritdoc />
@@ -76,10 +73,9 @@ namespace MicroOrm.Dapper.Repositories
         {
             var sqlQuery = SqlGenerator.GetUpdate(predicate, instance);
 
-            LogQuery<TEntity>(sqlQuery.GetSql());
-
-            var updated = Connection.Execute(sqlQuery.GetSql(), sqlQuery.Param, transaction) > 0;
-            return updated;
+            LogQuery<TEntity>(sqlQuery);
+             
+            return Connection.Execute(sqlQuery.GetSql(), sqlQuery.Param, transaction) > 0;
         }
 
         /// <inheritdoc />
@@ -93,10 +89,9 @@ namespace MicroOrm.Dapper.Repositories
         {
             var sqlQuery = SqlGenerator.GetUpdate(predicate, instance);
 
-            LogQuery<TEntity>(sqlQuery.GetSql());
-
-            var updated = await Connection.ExecuteAsync(sqlQuery.GetSql(), sqlQuery.Param, transaction) > 0;
-            return updated;
+            LogQuery<TEntity>(sqlQuery);
+             
+            return await Connection.ExecuteAsync(sqlQuery.GetSql(), sqlQuery.Param, transaction) > 0;
         }
 
 
@@ -105,20 +100,18 @@ namespace MicroOrm.Dapper.Repositories
         {
             var sqlQuery = SqlGenerator.GetUpdate(predicate, instance);
 
-            LogQuery<TEntity>(sqlQuery.GetSql());
-
-            var updated = await Connection.ExecuteAsync(sqlQuery.GetSql(), sqlQuery.Param, transaction) > 0;
-            return updated;
+            LogQuery<TEntity>(sqlQuery);
+             
+            return await Connection.ExecuteAsync(sqlQuery.GetSql(), sqlQuery.Param, transaction) > 0;
         }
         /// <inheritdoc />
         public async Task<bool> UpdateAsync(Expression<Func<TEntity, bool>> predicate, object instance)
         {
             var sqlQuery = SqlGenerator.GetUpdate(predicate, instance);
 
-            LogQuery<TEntity>(sqlQuery.GetSql());
-
-            var updated = await Connection.ExecuteAsync(sqlQuery.GetSql(), sqlQuery.Param) > 0;
-            return updated;
+            LogQuery<TEntity>(sqlQuery);
+ 
+            return await Connection.ExecuteAsync(sqlQuery.GetSql(), sqlQuery.Param) > 0;
         }
     }
 }

@@ -17,7 +17,7 @@ namespace MicroOrm.Dapper.Repositories
         public virtual bool Delete(TEntity instance, IDbTransaction transaction = null)
         {
             var queryResult = SqlGenerator.GetDelete(instance);
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
             var deleted = Connection.Execute(queryResult.GetSql(), queryResult.Param, transaction) > 0;
             return deleted;
         }
@@ -26,7 +26,7 @@ namespace MicroOrm.Dapper.Repositories
         public virtual async Task<bool> DeleteAsync(TEntity instance, IDbTransaction transaction = null)
         {
             var queryResult = SqlGenerator.GetDelete(instance);
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
             var deleted = await Connection.ExecuteAsync(queryResult.GetSql(), queryResult.Param, transaction) > 0;
             return deleted;
         }
@@ -35,7 +35,7 @@ namespace MicroOrm.Dapper.Repositories
         public virtual bool Delete(Expression<Func<TEntity, bool>> predicate, IDbTransaction transaction = null)
         {
             var queryResult = SqlGenerator.GetDelete(predicate);
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
             var deleted = Connection.Execute(queryResult.GetSql(), queryResult.Param, transaction) > 0;
             return deleted;
         }
@@ -44,7 +44,7 @@ namespace MicroOrm.Dapper.Repositories
         public virtual async Task<bool> DeleteAsync(Expression<Func<TEntity, bool>> predicate, IDbTransaction transaction = null)
         {
             var queryResult = SqlGenerator.GetDelete(predicate);
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
             var deleted = await Connection.ExecuteAsync(queryResult.GetSql(), queryResult.Param, transaction) > 0;
             return deleted;
         }

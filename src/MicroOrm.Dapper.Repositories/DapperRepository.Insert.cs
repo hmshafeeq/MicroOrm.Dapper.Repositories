@@ -23,7 +23,7 @@ namespace MicroOrm.Dapper.Repositories
         {
             var queryResult = SqlGenerator.GetInsert(instance);
 
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
 
             if (SqlGenerator.IsIdentity)
             {
@@ -45,7 +45,7 @@ namespace MicroOrm.Dapper.Repositories
         {
             var queryResult = SqlGenerator.GetInsert(instance);
 
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
 
             if (SqlGenerator.IsIdentity)
             {

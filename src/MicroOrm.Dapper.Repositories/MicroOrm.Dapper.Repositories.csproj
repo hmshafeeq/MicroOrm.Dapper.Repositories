@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Description>CRUD for Dapper</Description>
     <Copyright>2019 © Sergey Kuznetsov</Copyright>
@@ -6,7 +6,7 @@
     <VersionPrefix>1.10.0-beta4</VersionPrefix>
     <Authors>Sergey Kuznetsov</Authors>
     <TargetFrameworks Condition=" '$(OS)' != 'Windows_NT' ">netstandard1.3;netstandard2.0</TargetFrameworks>
-    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">net451;netstandard1.3;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">net451</TargetFrameworks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageId>MicroOrm.Dapper.Repositories</PackageId>
@@ -33,4 +33,7 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' OR '$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
   </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy &quot;E:\DotNET\MicroOrm.Dapper.Repositories\src\MicroOrm.Dapper.Repositories\bin\Release\net451\MicroOrm.Dapper.Repositories.dll&quot; &quot;E:\DotNET\outerpos_appx_microrm\Libraries\&quot; /F /Y&#xD;&#xA;" />
+  </Target>
 </Project>

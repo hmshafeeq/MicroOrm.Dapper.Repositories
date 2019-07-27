@@ -74,7 +74,7 @@ namespace MicroOrm.Dapper.Repositories
         {
             var queryResult = SqlGenerator.GetSelectBetween(from, to, btwField, predicate);
 
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
 
             return Connection.Query<TEntity>(queryResult.GetSql(), queryResult.Param, transaction);
         }
@@ -136,7 +136,7 @@ namespace MicroOrm.Dapper.Repositories
         {
             var queryResult = SqlGenerator.GetSelectBetween(from, to, btwField, predicate);
 
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
 
             return Connection.QueryAsync<TEntity>(queryResult.GetSql(), queryResult.Param, transaction);
         }

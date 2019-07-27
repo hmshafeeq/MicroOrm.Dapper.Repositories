@@ -3,6 +3,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace MicroOrm.Dapper.Console
     {
 
 
-        private static string connectionString = $"Server=localhost;Port=3306;Database=outerpos_lcc;Uid=root;Pwd=root;";
+        private static string connectionString = $"Server=localhost;Port=3307;Database=client;Uid=root;Pwd=root;";
         static void Main(string[] args)
         {
 
@@ -42,25 +43,24 @@ namespace MicroOrm.Dapper.Console
 
                         DateTime? date = null;
 
-                        var categories = conn.Categories.FindAll<Item>(x => x.CreatedAt >= DateTime.Parse("2019-02-07 13:01:56"), z => z.Items);
-                        foreach (var item in categories)
-                        {
-                            item.DeletedAt = DateTime.UtcNow;
-                        }
+                        //var category = (conn.Categories.FindAll()).FirstOrDefault();
+                        //category.SyncedAt = DateTime.UtcNow.Subtract(new TimeSpan(0, 20, 0));
+                        //conn.Categories.Update(category);
 
-                        System.Console.WriteLine(categories.Count().ToString() + " Items fetched");
+                        //System.Console.WriteLine(categories.Count().ToString() + " Items fetched");
                         //using (var tran = conn.BeginTransaction())
                         //{
                         //    var result = conn.Categories.BulkUpdate(categories,tran);
 
                         //    tran.Commit();
                         //}
-                        //Guid id = (Guid)conn.Categories.Insert(new Category
-                        //{
-                        //    ButtonColor = "$33",
-                        //    Name = "123123"
 
-                        //});
+                        conn.Categories.Insert(new Category
+                        {
+                            ButtonColor = "$33",
+                            Name = "123123"
+
+                        });
 
                         //System.Console.WriteLine("Item added");
 
@@ -89,9 +89,11 @@ namespace MicroOrm.Dapper.Console
 
 
                 }
-
-                System.Console.Write(string.Join("\r\n\r\n", conn.Logger.Logs));
-
+                if (conn.Logger.Logs != null)
+                {
+                    File.WriteAllText("sql.txt", string.Join("\r\n===============================================\r\n", conn.Logger.Logs));
+                    System.Console.Write(string.Join("\r\n\r\n", conn.Logger.Logs));
+                }
 
             }
 

@@ -22,6 +22,9 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
             if (HasUpdatedAt)
                 UpdatedAtProperty.SetValue(entity, DateTime.UtcNow);
 
+            if (TrackSyncStatus)
+                SyncStatusProperty.SetValue(entity, SyncStatusProperty.PropertyType.IsDateTime() ? null : "0");
+
             var query = new SqlQuery(entity);
 
             query.SqlBuilder

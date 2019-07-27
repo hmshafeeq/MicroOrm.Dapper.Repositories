@@ -25,7 +25,7 @@ namespace MicroOrm.Dapper.Repositories
         {
             var queryResult = SqlGenerator.GetSelectAll(predicate);
 
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
 
             return Connection.Query<TEntity>(queryResult.GetSql(), queryResult.Param, transaction);
         }
@@ -41,7 +41,7 @@ namespace MicroOrm.Dapper.Repositories
         {
             var queryResult = SqlGenerator.GetSelectAll(predicate);
 
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
 
             return Connection.QueryAsync<TEntity>(queryResult.GetSql(), queryResult.Param, transaction);
         }

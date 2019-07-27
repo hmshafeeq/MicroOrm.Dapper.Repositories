@@ -12,7 +12,7 @@ namespace MicroOrm.Dapper.Console
     public class Category  
     {
         [Column("id"), Key]
-        public Guid? Id { get; set; } = Guid.NewGuid();
+        public Guid? Id { get; set; } 
 
         [Column("name")]
         public string Name { get; set; }

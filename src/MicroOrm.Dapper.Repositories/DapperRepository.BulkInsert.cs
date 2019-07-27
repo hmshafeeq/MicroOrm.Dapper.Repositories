@@ -43,7 +43,7 @@ namespace MicroOrm.Dapper.Repositories
                 }
             }
             var queryResult = SqlGenerator.GetBulkInsert(instances);
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
             return Connection.Execute(queryResult.GetSql(), queryResult.Param, transaction);
         }
 
@@ -75,7 +75,7 @@ namespace MicroOrm.Dapper.Repositories
                 }
             }
             var queryResult = SqlGenerator.GetBulkInsert(instances);
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
             return await Connection.ExecuteAsync(queryResult.GetSql(), queryResult.Param, transaction);
         }
     }

@@ -20,7 +20,7 @@ namespace MicroOrm.Dapper.Repositories
         {
             var queryResult = SqlGenerator.GetSelectAll(predicate, tChild1);
 
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
 
             return ExecuteJoinQuery<TChild1, DontMap, DontMap, DontMap, DontMap, DontMap>(queryResult, transaction, tChild1);
         }
@@ -34,7 +34,7 @@ namespace MicroOrm.Dapper.Repositories
         {
             var sqlQuery = SqlGenerator.GetSelectAll(predicate, tChild1, tChild2);
 
-            LogQuery<TEntity>(sqlQuery.GetSql());
+            LogQuery<TEntity>(sqlQuery);
 
             return ExecuteJoinQuery<TChild1, TChild2, DontMap, DontMap, DontMap, DontMap>(sqlQuery, transaction, tChild1, tChild2);
         }
@@ -49,7 +49,7 @@ namespace MicroOrm.Dapper.Repositories
         {
             var sqlQuery = SqlGenerator.GetSelectAll(predicate, tChild1, tChild2, tChild3);
 
-            LogQuery<TEntity>(sqlQuery.GetSql());
+            LogQuery<TEntity>(sqlQuery);
 
             return ExecuteJoinQuery<TChild1, TChild2, TChild3, DontMap, DontMap, DontMap>(sqlQuery, transaction, tChild1, tChild2, tChild3);
         }
@@ -65,7 +65,7 @@ namespace MicroOrm.Dapper.Repositories
         {
             var sqlQuery = SqlGenerator.GetSelectAll(predicate, tChild1, tChild2, tChild3, tChild4);
 
-            LogQuery<TEntity>(sqlQuery.GetSql());
+            LogQuery<TEntity>(sqlQuery);
 
             return ExecuteJoinQuery<TChild1, TChild2, TChild3, TChild4, DontMap, DontMap>(sqlQuery, transaction, tChild1, tChild2, tChild3, tChild4);
         }
@@ -82,7 +82,7 @@ namespace MicroOrm.Dapper.Repositories
         {
             var sqlQuery = SqlGenerator.GetSelectAll(predicate, tChild1, tChild2, tChild3, tChild4, tChild5);
 
-            LogQuery<TEntity>(sqlQuery.GetSql());
+            LogQuery<TEntity>(sqlQuery);
 
             return ExecuteJoinQuery<TChild1, TChild2, TChild3, TChild4, TChild5, DontMap>(sqlQuery, transaction, tChild1, tChild2, tChild3, tChild4, tChild5);
         }
@@ -100,7 +100,7 @@ namespace MicroOrm.Dapper.Repositories
         {
             var sqlQuery = SqlGenerator.GetSelectAll(predicate, tChild1, tChild2, tChild3, tChild4, tChild5, tChild6);
 
-            LogQuery<TEntity>(sqlQuery.GetSql());
+            LogQuery<TEntity>(sqlQuery);
 
             return ExecuteJoinQuery<TChild1, TChild2, TChild3, TChild4, TChild5, TChild6>(sqlQuery, transaction, tChild1, tChild2, tChild3, tChild4, tChild5, tChild6);
         }
@@ -110,7 +110,7 @@ namespace MicroOrm.Dapper.Repositories
         {
             var queryResult = SqlGenerator.GetSelectAll(predicate, tChild1);
 
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
 
             return ExecuteJoinQueryAsync<TChild1, DontMap, DontMap, DontMap, DontMap, DontMap>(queryResult, transaction, tChild1);
         }
@@ -125,7 +125,7 @@ namespace MicroOrm.Dapper.Repositories
         {
             var sqlQuery = SqlGenerator.GetSelectAll(predicate, tChild1, tChild2);
 
-            LogQuery<TEntity>(sqlQuery.GetSql());
+            LogQuery<TEntity>(sqlQuery);
 
             return ExecuteJoinQueryAsync<TChild1, TChild2, DontMap, DontMap, DontMap, DontMap>(sqlQuery, transaction, tChild1, tChild2);
         }
@@ -140,7 +140,7 @@ namespace MicroOrm.Dapper.Repositories
         {
             var sqlQuery = SqlGenerator.GetSelectAll(predicate, tChild1, tChild2, tChild3);
 
-            LogQuery<TEntity>(sqlQuery.GetSql());
+            LogQuery<TEntity>(sqlQuery);
 
             return ExecuteJoinQueryAsync<TChild1, TChild2, TChild3, DontMap, DontMap, DontMap>(sqlQuery, transaction, tChild1, tChild2, tChild3);
         }
@@ -156,7 +156,7 @@ namespace MicroOrm.Dapper.Repositories
         {
             var sqlQuery = SqlGenerator.GetSelectAll(predicate, tChild1, tChild2, tChild3, tChild4);
 
-            LogQuery<TEntity>(sqlQuery.GetSql());
+            LogQuery<TEntity>(sqlQuery);
 
             return ExecuteJoinQueryAsync<TChild1, TChild2, TChild3, TChild4, DontMap, DontMap>(sqlQuery, transaction, tChild1, tChild2, tChild3, tChild4);
         }
@@ -173,7 +173,7 @@ namespace MicroOrm.Dapper.Repositories
         {
             var sqlQuery = SqlGenerator.GetSelectAll(predicate, tChild1, tChild2, tChild3, tChild4, tChild5);
 
-            LogQuery<TEntity>(sqlQuery.GetSql());
+            LogQuery<TEntity>(sqlQuery);
 
             return ExecuteJoinQueryAsync<TChild1, TChild2, TChild3, TChild4, TChild5, DontMap>(sqlQuery, transaction, tChild1, tChild2, tChild3, tChild4, tChild5);
         }
@@ -191,7 +191,7 @@ namespace MicroOrm.Dapper.Repositories
         {
             var sqlQuery = SqlGenerator.GetSelectAll(predicate, tChild1, tChild2, tChild3, tChild4, tChild5, tChild6);
 
-            LogQuery<TEntity>(sqlQuery.GetSql());
+            LogQuery<TEntity>(sqlQuery);
 
             return ExecuteJoinQueryAsync<TChild1, TChild2, TChild3, TChild4, TChild5, TChild6>(sqlQuery, transaction, tChild1, tChild2, tChild3, tChild4, tChild5, tChild6);
         }

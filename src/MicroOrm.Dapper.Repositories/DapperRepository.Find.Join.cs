@@ -17,7 +17,7 @@ namespace MicroOrm.Dapper.Repositories
         public virtual TEntity Find<TChild1>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, object>> tChild1, IDbTransaction transaction = null)
         {
             var queryResult = SqlGenerator.GetSelectFirst(predicate, tChild1);
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
             return ExecuteJoinQuery<TChild1, DontMap, DontMap, DontMap, DontMap, DontMap>(queryResult, transaction, tChild1).FirstOrDefault();
         }
 
@@ -28,7 +28,7 @@ namespace MicroOrm.Dapper.Repositories
             IDbTransaction transaction = null)
         {
             var queryResult = SqlGenerator.GetSelectFirst(predicate, tChild1, tChild2);
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
             return ExecuteJoinQuery<TChild1, TChild2, DontMap, DontMap, DontMap, DontMap>(queryResult, transaction, tChild1, tChild2).FirstOrDefault();
         }
 
@@ -40,7 +40,7 @@ namespace MicroOrm.Dapper.Repositories
             IDbTransaction transaction = null)
         {
             var queryResult = SqlGenerator.GetSelectFirst(predicate, tChild1, tChild2, tChild3);
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
             return ExecuteJoinQuery<TChild1, TChild2, TChild3, DontMap, DontMap, DontMap>(queryResult, transaction, tChild1, tChild2, tChild3).FirstOrDefault();
         }
 
@@ -54,7 +54,7 @@ namespace MicroOrm.Dapper.Repositories
             IDbTransaction transaction = null)
         {
             var queryResult = SqlGenerator.GetSelectFirst(predicate, tChild1, tChild2, tChild3, tChild4);
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
             return ExecuteJoinQuery<TChild1, TChild2, TChild3, TChild4, DontMap, DontMap>(queryResult, transaction, tChild1, tChild2, tChild3, tChild4).FirstOrDefault();
         }
 
@@ -68,7 +68,7 @@ namespace MicroOrm.Dapper.Repositories
             IDbTransaction transaction = null)
         {
             var queryResult = SqlGenerator.GetSelectFirst(predicate, tChild1, tChild2, tChild3, tChild4, tChild5);
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
             return ExecuteJoinQuery<TChild1, TChild2, TChild3, TChild4, TChild5, DontMap>(queryResult, transaction, tChild1, tChild2, tChild3, tChild4, tChild5).FirstOrDefault();
         }
 
@@ -83,7 +83,7 @@ namespace MicroOrm.Dapper.Repositories
             IDbTransaction transaction = null)
         {
             var queryResult = SqlGenerator.GetSelectFirst(predicate, tChild1, tChild2, tChild3, tChild4, tChild5, tChild6);
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
             return ExecuteJoinQuery<TChild1, TChild2, TChild3, TChild4, TChild5, TChild6>(queryResult, transaction, tChild1, tChild2, tChild3, tChild4, tChild5, tChild6).FirstOrDefault();
         }
 
@@ -91,7 +91,7 @@ namespace MicroOrm.Dapper.Repositories
         public virtual async Task<TEntity> FindAsync<TChild1>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, object>> tChild1, IDbTransaction transaction = null)
         {
             var queryResult = SqlGenerator.GetSelectFirst(predicate, tChild1);
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
             return (await ExecuteJoinQueryAsync<TChild1, DontMap, DontMap, DontMap, DontMap, DontMap>(queryResult, transaction, tChild1)).FirstOrDefault();
         }
 
@@ -102,7 +102,7 @@ namespace MicroOrm.Dapper.Repositories
             IDbTransaction transaction = null)
         {
             var queryResult = SqlGenerator.GetSelectFirst(predicate, tChild1, tChild2);
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
             return (await ExecuteJoinQueryAsync<TChild1, TChild2, DontMap, DontMap, DontMap, DontMap>(queryResult, transaction, tChild1, tChild2)).FirstOrDefault();
         }
 
@@ -114,7 +114,7 @@ namespace MicroOrm.Dapper.Repositories
             IDbTransaction transaction = null)
         {
             var queryResult = SqlGenerator.GetSelectFirst(predicate, tChild1, tChild2, tChild3);
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
             return (await ExecuteJoinQueryAsync<TChild1, TChild2, TChild3, DontMap, DontMap, DontMap>(queryResult, transaction, tChild1, tChild2, tChild3)).FirstOrDefault();
         }
 
@@ -127,7 +127,7 @@ namespace MicroOrm.Dapper.Repositories
             IDbTransaction transaction = null)
         {
             var queryResult = SqlGenerator.GetSelectFirst(predicate, tChild1, tChild2, tChild3, tChild4);
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
             return (await ExecuteJoinQueryAsync<TChild1, TChild2, TChild3, TChild4, DontMap, DontMap>(queryResult, transaction, tChild1, tChild2, tChild3, tChild4)).FirstOrDefault();
         }
 
@@ -141,7 +141,7 @@ namespace MicroOrm.Dapper.Repositories
             IDbTransaction transaction = null)
         {
             var queryResult = SqlGenerator.GetSelectFirst(predicate, tChild1, tChild2, tChild3, tChild4, tChild5);
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
             return (await ExecuteJoinQueryAsync<TChild1, TChild2, TChild3, TChild4, TChild5, DontMap>(queryResult, transaction, tChild1, tChild2, tChild3, tChild4, tChild5)).FirstOrDefault();
         }
 
@@ -156,7 +156,7 @@ namespace MicroOrm.Dapper.Repositories
             IDbTransaction transaction = null)
         {
             var queryResult = SqlGenerator.GetSelectFirst(predicate, tChild1, tChild2, tChild3, tChild4, tChild5, tChild6);
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
             return (await ExecuteJoinQueryAsync<TChild1, TChild2, TChild3, TChild4, TChild5, TChild6>(queryResult, transaction, tChild1, tChild2, tChild3, tChild4, tChild5, tChild6)).FirstOrDefault();
         }
     }

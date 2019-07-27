@@ -36,7 +36,7 @@ namespace MicroOrm.Dapper.Repositories
         public virtual int Count(Expression<Func<TEntity, bool>> predicate, IDbTransaction transaction)
         {
             var queryResult = SqlGenerator.GetCount(predicate);
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
             return Connection.QueryFirstOrDefault<int>(queryResult.GetSql(), queryResult.Param, transaction);
         }
 
@@ -62,7 +62,7 @@ namespace MicroOrm.Dapper.Repositories
         public virtual int Count(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, object>> distinctField, IDbTransaction transaction)
         {
             var queryResult = SqlGenerator.GetCount(predicate, distinctField);
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
             return Connection.QueryFirstOrDefault<int>(queryResult.GetSql(), queryResult.Param, transaction);
         }
 
@@ -88,7 +88,7 @@ namespace MicroOrm.Dapper.Repositories
         public virtual Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate, IDbTransaction transaction)
         {
             var queryResult = SqlGenerator.GetCount(predicate);
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
             return Connection.QueryFirstOrDefaultAsync<int>(queryResult.GetSql(), queryResult.Param, transaction);
         }
 
@@ -114,7 +114,7 @@ namespace MicroOrm.Dapper.Repositories
         public virtual Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, object>> distinctField, IDbTransaction transaction)
         {
             var queryResult = SqlGenerator.GetCount(predicate, distinctField);
-            LogQuery<TEntity>(queryResult.GetSql());
+            LogQuery<TEntity>(queryResult);
             return Connection.QueryFirstOrDefaultAsync<int>(queryResult.GetSql(), queryResult.Param, transaction);
         }
     }

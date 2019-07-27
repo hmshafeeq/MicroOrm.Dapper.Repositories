@@ -9,7 +9,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
     /// <inheritdoc />
     public partial class SqlGenerator<TEntity>
         where TEntity : class
-    { 
+    {
         /// <inheritdoc />
         public virtual SqlQuery GetBulkInsert(IEnumerable<TEntity> entities)
         {
@@ -28,9 +28,14 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
 
             var values = new List<string>();
             var parameters = new Dictionary<string, object>();
-
+            var keyProperty = KeySqlProperties.Where(s => s.PropertyInfo.PropertyType == typeof(Guid) || s.PropertyInfo.PropertyType == typeof(Guid?)).FirstOrDefault();
             for (var i = 0; i < entitiesArray.Length; i++)
             {
+                #region If There Is No Identity Property 
+                if (!IsIdentity && keyProperty != null)
+                    keyProperty.PropertyInfo.SetValue(entitiesArray[i], Guid.NewGuid());
+                #endregion
+
                 if (HasCreatedAt)
                     CreatedAtProperty.SetValue(entitiesArray[i], DateTime.UtcNow);
 

@@ -17,6 +17,13 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
                     ? SqlProperties.Where(p => !p.PropertyName.Equals(IdentitySqlProperty.PropertyName, StringComparison.OrdinalIgnoreCase))
                     : SqlProperties).ToList();
 
+            var keyProperty = KeySqlProperties.Where(s => s.PropertyInfo.PropertyType == typeof(Guid) || s.PropertyInfo.PropertyType == typeof(Guid?)).FirstOrDefault();
+
+            #region If There Is No Identity Property 
+            if (!IsIdentity && keyProperty != null)
+                keyProperty.PropertyInfo.SetValue(entity, Guid.NewGuid());
+            #endregion
+
             if (HasCreatedAt)
                 CreatedAtProperty.SetValue(entity, DateTime.UtcNow);
 
@@ -24,7 +31,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
                 UpdatedAtProperty.SetValue(entity, DateTime.UtcNow);
 
             if (TrackSyncStatus)
-                SyncStatusProperty.SetValue(entity, SyncStatusProperty.PropertyType.IsDateTime() ?null : "0");
+                SyncStatusProperty.SetValue(entity, SyncStatusProperty.PropertyType.IsDateTime() ? null : "0");
 
 
             var query = new SqlQuery(entity);
