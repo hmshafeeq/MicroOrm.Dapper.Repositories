@@ -74,7 +74,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
         ///     Metadata sql join properties
         /// </summary>
         SqlJoinPropertyMetadata[] SqlJoinProperties { get; }
-         
+
 
         /// <summary>
         ///     Config for queries
@@ -85,12 +85,12 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
         ///     Has Logical delete
         /// </summary>
         bool LogicalDelete { get; }
-          
+
         /// <inheritdoc />
         PropertyInfo LogicalDeleteProperty { get; }
 
         /// <inheritdoc />
-        SqlPropertyMetadata LogicalDeletePropertyMetadata { get;  }
+        SqlPropertyMetadata LogicalDeletePropertyMetadata { get; }
 
         /// <inheritdoc />
         bool TrackSyncStatus { get; }
@@ -126,7 +126,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
         ///     Get SQL for UPDATE Query
         /// </summary>
         SqlQuery GetUpdate(Expression<Func<TEntity, bool>> predicate, object entity);
-         
+
 
         /// <summary>
         ///     Get SQL for UPDATE Query
@@ -158,10 +158,17 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
         /// </summary>
         SqlQuery GetSelectBetween(object from, object to, Expression<Func<TEntity, object>> btwField);
 
+
         /// <summary>
         ///     Get SQL for SELECT Query with BETWEEN
         /// </summary>
         SqlQuery GetSelectBetween(object from, object to, Expression<Func<TEntity, object>> btwField, Expression<Func<TEntity, bool>> predicate);
+
+        /// <summary>
+        ///     Get SQL for SELECT Query with Given Fields
+        /// </summary>
+        SqlQuery GetAllSelectedFields(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] fields);
+
 
         /// <summary>
         ///     Get SQL for DELETE Query

@@ -33,7 +33,11 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
             {
                 #region If There Is No Identity Property 
                 if (!IsIdentity && keyProperty != null)
+                {
+                    var oldKey = keyProperty.PropertyInfo.GetValue(entitiesArray[i], null);
+                    if(oldKey == null || (Guid?)oldKey == default(Guid?))
                     keyProperty.PropertyInfo.SetValue(entitiesArray[i], Guid.NewGuid());
+                }
                 #endregion
 
                 if (HasCreatedAt)

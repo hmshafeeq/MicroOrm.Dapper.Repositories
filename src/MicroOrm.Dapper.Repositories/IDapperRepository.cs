@@ -22,7 +22,7 @@ namespace MicroOrm.Dapper.Repositories
         ///     SQL Genetator
         /// </summary>
         ISqlGenerator<TEntity> SqlGenerator { get; }
-         
+
 
         /// <summary>
         ///     Get number of rows
@@ -587,7 +587,7 @@ namespace MicroOrm.Dapper.Repositories
         /// <summary>
         ///     Update object in DB
         /// </summary>
-        bool Update(TEntity instance); 
+        bool Update(TEntity instance);
         /// <summary>
         ///     Update object in DB
         /// </summary>
@@ -603,7 +603,7 @@ namespace MicroOrm.Dapper.Repositories
         ///     Update object in DB
         /// </summary>
         bool Update(Expression<Func<TEntity, bool>> predicate, object instance);
-         
+
         /// <summary>
         ///     Update object in DB
         /// </summary>
@@ -669,7 +669,7 @@ namespace MicroOrm.Dapper.Repositories
         ///     Get all objects with BETWEEN query
         /// </summary>
         IEnumerable<TEntity> FindAllBetween(object from, object to, Expression<Func<TEntity, object>> btwField);
-        
+
         /// <summary>
         ///     Get all objects with BETWEEN query
         /// </summary>
@@ -683,7 +683,7 @@ namespace MicroOrm.Dapper.Repositories
             object to,
             Expression<Func<TEntity, object>> btwField,
             Expression<Func<TEntity, bool>> predicate);
-        
+
         /// <summary>
         ///     Get all objects with BETWEEN query
         /// </summary>
@@ -780,5 +780,36 @@ namespace MicroOrm.Dapper.Repositories
             Expression<Func<TEntity, object>> btwField,
             Expression<Func<TEntity, bool>> predicate,
             IDbTransaction transaction);
+
+        /// <summary>
+        /// Similar to FindAll, Only difference is that you can specify the fields you want to load
+        /// </summary>
+        /// <param name="fields"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> FindFields(params Expression<Func<TEntity, object>>[] fields);
+
+        /// <summary>
+        /// Similar to FindAll, Only difference is that you can specify the fields you want to load
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <param name="fields"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> FindFields(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] fields);
+
+        /// <summary>
+        /// Similar to FindAllAsync, Only difference is that you can specify the fields you want to load
+        /// </summary>
+        /// <param name="fields"></param>
+        /// <returns></returns>
+        Task<IEnumerable<TEntity>> FindFieldsAsync(params Expression<Func<TEntity, object>>[] fields);
+
+
+        /// <summary>
+        /// Similar to FindAllAsync, Only difference is that you can specify the fields you want to load
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <param name="fields"></param>
+        /// <returns></returns>
+        Task<IEnumerable<TEntity>> FindFieldsAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] fields);
     }
 }

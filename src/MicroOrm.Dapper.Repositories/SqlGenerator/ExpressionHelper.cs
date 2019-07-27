@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -29,7 +29,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
                 case UnaryExpression expression:
                     expr = (MemberExpression)expression.Operand;
                     break;
-
+                     
                 default:
                     throw new ArgumentException("Expression field isn't supported", nameof(field));
             }

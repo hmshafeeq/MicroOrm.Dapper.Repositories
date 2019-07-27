@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -37,7 +38,7 @@ namespace MicroOrm.Dapper.Console
 
                     conn.Logger.Start();
 
-                    //for (int i = 0; i < 10; i++)
+                  for (int i = 0; i < 10; i++)
                     {
                         var watch = System.Diagnostics.Stopwatch.StartNew();
 
@@ -55,12 +56,12 @@ namespace MicroOrm.Dapper.Console
                         //    tran.Commit();
                         //}
 
-                        conn.Categories.Insert(new Category
-                        {
-                            ButtonColor = "$33",
-                            Name = "123123"
+                        //conn.Categories.Insert(new Category
+                        //{
+                        //    ButtonColor = "$33",
+                        //    Name = "123123"
 
-                        });
+                        //});
 
                         //System.Console.WriteLine("Item added");
 
@@ -77,6 +78,7 @@ namespace MicroOrm.Dapper.Console
                         //System.Console.WriteLine("Item deleted");
                         //watch.Stop();
 
+                        var category = (conn.Items.FindFields(x=>x.DeletedAt)); 
                         System.Console.WriteLine(Convert.ToDecimal(watch.ElapsedMilliseconds) / 1000);
 
                         System.Console.WriteLine(Environment.NewLine);
@@ -104,7 +106,6 @@ namespace MicroOrm.Dapper.Console
 
             System.Console.ReadKey();
         }
-
 
         private static MySqlDbContext GetConnection()
         {

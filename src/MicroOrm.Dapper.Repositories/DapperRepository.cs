@@ -1,4 +1,8 @@
-using System.Data; 
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 using MicroOrm.Dapper.Repositories.Logger;
 using MicroOrm.Dapper.Repositories.SqlGenerator;
 
@@ -61,6 +65,7 @@ namespace MicroOrm.Dapper.Repositories
 
         /// <inheritdoc />
         public ISqlGenerator<TEntity> SqlGenerator { get; }
+
 
         /// <summary>
         /// 

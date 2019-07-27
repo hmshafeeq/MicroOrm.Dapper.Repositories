@@ -54,6 +54,12 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
                             var propertyValue = ExpressionHelper.GetValuesFromCollection(methodCallExpression);
                             var opr = ExpressionHelper.GetMethodCallSqlOperator(methodName, isNotUnary);
                             var link = ExpressionHelper.GetSqlOperator(linkingType);
+                            
+                            // Handle empty list passed scenario
+                            // https://github.com/StackExchange/Dapper/issues/565
+                            if (opr.ToUpper().Contains("IN") && propertyValue is System.Collections.ICollection collection && collection.Count == 0)
+                                propertyValue = new[] { "" };
+
                             return new QueryParameterExpression(link, propertyName, propertyValue, opr, isNested);
                         }
                     case "StringContains":

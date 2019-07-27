@@ -24,13 +24,7 @@ namespace MicroOrm.Dapper.Repositories
             var queryResult = SqlGenerator.GetInsert(instance);
 
             LogQuery<TEntity>(queryResult);
-
-            if (SqlGenerator.IsIdentity)
-            {
-                var newId = Connection.Query<long>(queryResult.GetSql(), queryResult.Param, transaction).FirstOrDefault();
-                return SetValue(newId, instance);
-            }
-
+              
             return Connection.Execute(queryResult.GetSql(), instance, transaction) > 0 ? GetLastInsertId(instance) : false;
         }
 
@@ -46,25 +40,10 @@ namespace MicroOrm.Dapper.Repositories
             var queryResult = SqlGenerator.GetInsert(instance);
 
             LogQuery<TEntity>(queryResult);
-
-            if (SqlGenerator.IsIdentity)
-            {
-                var newId = (await Connection.QueryAsync<long>(queryResult.GetSql(), queryResult.Param, transaction)).FirstOrDefault();
-                return SetValue(newId, instance);
-            }
+             
             return await Connection.ExecuteAsync(queryResult.GetSql(), instance, transaction) > 0 ? GetLastInsertId(instance) : false; ;
         }
-
-        private bool SetValue(long newId, TEntity instance)
-        {
-            var added = newId > 0;
-            if (added)
-            {
-                var newParsedId = Convert.ChangeType(newId, SqlGenerator.IdentitySqlProperty.PropertyInfo.PropertyType);
-                SqlGenerator.IdentitySqlProperty.PropertyInfo.SetValue(instance, newParsedId);
-            }
-            return added;
-        }
+         
 
         private object GetLastInsertId(TEntity instance)
         {
