@@ -33,12 +33,8 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
 
             if (HasUpdatedAt)
                 UpdatedAtProperty.SetValue(entity, DateTime.UtcNow);
-
-            if (TrackSyncStatus)
-                SyncStatusProperty.SetValue(entity, SyncStatusProperty.PropertyType.IsDateTime() ? null : "0");
-
-
-            var query = new SqlQuery(entity);
+             
+            var query = new SqlQuery(TableName, entity, QueryType.Insert); 
 
             query.SqlBuilder.AppendFormat("INSERT INTO {0} ({1}) VALUES ({2})", TableName, string.Join(", ", properties.Select(p => p.ColumnName)),
                                             string.Join(", ", properties.Select(p => "@" + p.PropertyName))); // values

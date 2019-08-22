@@ -22,9 +22,9 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
             var properties =
                 (IsIdentity
                     ? SqlProperties.Where(p => !p.PropertyName.Equals(IdentitySqlProperty.PropertyName, StringComparison.OrdinalIgnoreCase))
-                    : SqlProperties).ToList();
+                    : SqlProperties).ToList(); 
 
-            var query = new SqlQuery();
+            var query = new SqlQuery(TableName, QueryType.Insert);
 
             var values = new List<string>();
             var parameters = new Dictionary<string, object>();
@@ -45,10 +45,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
 
                 if (HasUpdatedAt)
                     UpdatedAtProperty.SetValue(entitiesArray[i], DateTime.UtcNow);
-
-                if (TrackSyncStatus)
-                    SyncStatusProperty.SetValue(entitiesArray[i], SyncStatusProperty.PropertyType.IsDateTime() ? null : "0");
-
+                 
                 foreach (var property in properties)
                     // ReSharper disable once PossibleNullReferenceException
                     parameters.Add(property.PropertyName + i, entityType.GetProperty(property.PropertyName).GetValue(entitiesArray[i], null));
@@ -57,8 +54,9 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
             }
 
             query.SqlBuilder.AppendFormat("INSERT INTO {0} ({1}) VALUES {2}", TableName, string.Join(", ", properties.Select(p => p.ColumnName)), string.Join(",", values)); // values
-
+             
             query.SetParam(parameters);
+            query.SetTable(TableName);
 
             return query;
         }

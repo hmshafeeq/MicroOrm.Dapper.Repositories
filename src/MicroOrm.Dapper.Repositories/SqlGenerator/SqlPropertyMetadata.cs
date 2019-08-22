@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
 using MicroOrm.Dapper.Repositories.Attributes;
+using MicroOrm.Dapper.Repositories.Attributes.Joins;
 
 namespace MicroOrm.Dapper.Repositories.SqlGenerator
 {
@@ -25,9 +26,9 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
             {
                 ColumnName = PropertyInfo.Name;
             }
-            var ignore = PropertyInfo.GetCustomAttribute<IgnoreAttribute>();
-            if (ignore != null)
-                Ignore = true;
+
+            Ignore = PropertyInfo.GetCustomAttribute<IgnoreAttribute>() != null ||
+                    PropertyInfo.GetCustomAttribute<JoinAttributeBase>() != null;
         }
 
         /// <summary>

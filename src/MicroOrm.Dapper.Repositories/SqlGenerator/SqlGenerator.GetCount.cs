@@ -11,7 +11,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
         /// <inheritdoc />
         public virtual SqlQuery GetCount(Expression<Func<TEntity, bool>> predicate)
         {
-            var sqlQuery = new SqlQuery();
+            var sqlQuery = new SqlQuery(TableName, QueryType.Select);
 
             sqlQuery.SqlBuilder
                 .Append("SELECT COUNT(*) FROM ")
@@ -42,7 +42,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
 
         private SqlQuery InitBuilderCountWithDistinct(SqlPropertyMetadata sqlProperty)
         {
-            var query = new SqlQuery();
+            var query = new SqlQuery(TableName, QueryType.Select);
             query.SqlBuilder.Append("SELECT COUNT(DISTINCT ");
 
             query.SqlBuilder

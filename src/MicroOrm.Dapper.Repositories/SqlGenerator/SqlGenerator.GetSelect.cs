@@ -120,7 +120,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
                 return GetSelectAll(predicate);
             }
 
-            var query = new SqlQuery();
+            var query = new SqlQuery(TableName, QueryType.Select);
             query.SqlBuilder.Append("SELECT ")
                 .Append(GetFieldsSelect(TableName, SqlProperties.Where(x => fieldNames.Any(s => s == x.PropertyName)).ToArray()))
                 .Append(" FROM ")
@@ -156,7 +156,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
 
         private SqlQuery InitBuilderSelect(bool firstOnly)
         {
-            var query = new SqlQuery();
+            var query = new SqlQuery(TableName, QueryType.Select);
             query.SqlBuilder.Append("SELECT ");
             if (firstOnly && Config.SqlProvider == SqlProvider.MSSQL)
                 query.SqlBuilder.Append("TOP 1 ");
@@ -172,7 +172,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
             string ProjectionFunction(SqlPropertyMetadata p)
             {
                 return !string.IsNullOrEmpty(p.Alias)
-                    ? string.Format("{0}.{1} AS {2}", tableName, p.ColumnName, p.PropertyName)
+                    ? string.Format("{0}.{1} AS '{2}'", tableName, p.ColumnName, p.PropertyName)
                     : string.Format("{0}.{1}", tableName, p.ColumnName);
             }
 

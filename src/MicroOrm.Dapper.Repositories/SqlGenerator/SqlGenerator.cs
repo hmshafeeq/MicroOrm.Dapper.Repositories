@@ -108,16 +108,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
         public PropertyInfo LogicalDeleteProperty { get; protected set; }
 
         /// <inheritdoc />
-        public SqlPropertyMetadata LogicalDeletePropertyMetadata { get; protected set; }
-
-        /// <inheritdoc />
-        public PropertyInfo SyncStatusProperty { get; protected set; }
-
-        /// <inheritdoc />
-        public SqlPropertyMetadata SyncStatusPropertyMetadata { get; protected set; }
-
-        /// <inheritdoc />
-        public bool TrackSyncStatus => SyncStatusProperty!=null && (Config == null || Config.TrackSyncStatus);
+        public SqlPropertyMetadata LogicalDeletePropertyMetadata { get; protected set; } 
 
 
         /// <summary>
@@ -149,11 +140,5 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
                 : startQuotationMark + tableName + endQuotationMark;
         }
 
-        private enum QueryType
-        {
-            Select,
-            Delete,
-            Update
-        }
     }
 }

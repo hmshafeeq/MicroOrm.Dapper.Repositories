@@ -76,15 +76,8 @@ namespace MicroOrm.Dapper.Repositories
         internal void LogQuery<T>(SqlQuery sqlQuery, [System.Runtime.CompilerServices.CallerMemberName] string methodName = null)
         {
             if (Logger?.LogReceived != null)
-            { 
-                string paramss = "TinyJsonSerializer could not serialize query parameters.";
-                try
-                {
-                    paramss = TinyJsonSerializer.Serialize(sqlQuery.Param);   
-                }
-                catch (System.Exception) { }
-
-                Logger?.LogQuery<T>($"{sqlQuery.GetSql()}\r\nClient Timestamp : {System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}\r\nParameters : {paramss}", methodName);
+            {  
+                Logger?.LogQuery<T>(sqlQuery, methodName);
             }
 
         }

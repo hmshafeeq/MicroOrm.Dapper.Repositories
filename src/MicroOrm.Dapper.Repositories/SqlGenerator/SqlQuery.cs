@@ -13,17 +13,28 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
         public SqlQuery()
         {
             SqlBuilder = new StringBuilder();
+            ExecutedOn = System.DateTime.UtcNow;
         }
 
-        /// <inheritdoc />
         /// <summary>
-        ///     Initializes a new instance of the class.
+        /// Initializes a new instance of the class.
         /// </summary>
-        /// <param name="param">The param.</param>
-        public SqlQuery(object param)
+        /// <param name="table"></param>
+        /// <param name="type"></param>
+        public SqlQuery(string table, QueryType type = QueryType.Select)
+            : this()
+        {
+            Table = table;
+            Type = type; 
+        }
+
+        /// <inheritdoc /> 
+        public SqlQuery(string table, object param, QueryType type = QueryType.Select)
             : this()
         {
             Param = param;
+            Table = table;
+            Type = type; 
         }
 
         /// <summary>
@@ -35,6 +46,19 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
         ///     Gets the param
         /// </summary>
         public object Param { get; private set; }
+    
+        /// <summary>
+        ///     Gets the Table Name
+        /// </summary>
+        public string Table { get; private set; }
+
+        /// <summary>
+        ///     Gets the Query Type
+        /// </summary>
+        public QueryType Type { get; private set; }
+
+        /// <inheritdoc />
+        public System.DateTime ExecutedOn { get; set; }
 
         /// <summary>
         ///     Gets the SQL.
@@ -44,13 +68,24 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
             return SqlBuilder.ToString().Trim();
         }
 
-        /// <summary>
-        ///     Set alternative param
-        /// </summary>
-        /// <param name="param">The param.</param>
+        /// <inheritdoc />
         public void SetParam(object param)
         {
             Param = param;
         }
+
+        /// <inheritdoc />
+        public void SetTable(string table)
+        {
+            Table = table;
+        }
+
+        /// <inheritdoc />
+        public void SetType(QueryType type)
+        {
+            Type = type;
+        }
+ 
+
     }
 }

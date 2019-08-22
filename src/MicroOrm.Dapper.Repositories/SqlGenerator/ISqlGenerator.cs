@@ -90,10 +90,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
         PropertyInfo LogicalDeleteProperty { get; }
 
         /// <inheritdoc />
-        SqlPropertyMetadata LogicalDeletePropertyMetadata { get; }
-
-        /// <inheritdoc />
-        bool TrackSyncStatus { get; }
+        SqlPropertyMetadata LogicalDeletePropertyMetadata { get; } 
 
         /// <summary>
         ///     Get SQL for COUNT Query

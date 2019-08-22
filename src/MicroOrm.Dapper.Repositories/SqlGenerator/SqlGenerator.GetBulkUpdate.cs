@@ -22,8 +22,8 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
 
             var properties = SqlProperties.Where(p =>
                 !KeySqlProperties.Any(k => k.PropertyName.Equals(p.PropertyName, StringComparison.OrdinalIgnoreCase)) && !p.Ignore).ToArray();
-
-            var query = new SqlQuery();
+               
+            var query = new SqlQuery(TableName, QueryType.Update);
 
             var parameters = new Dictionary<string, object>();
 
@@ -31,10 +31,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
             {
                 if (HasUpdatedAt)
                     UpdatedAtProperty.SetValue(entitiesArray[i], DateTime.UtcNow);
-
-                if (TrackSyncStatus)
-                    SyncStatusProperty.SetValue(entitiesArray[i], SyncStatusProperty.PropertyType.IsDateTime() ? null : "0");
-
+ 
                 if (i > 0)
                     query.SqlBuilder.Append("; ");
 

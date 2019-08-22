@@ -11,7 +11,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
         /// <inheritdoc />
         public virtual SqlQuery GetDelete(TEntity entity)
         {
-            var sqlQuery = new SqlQuery();
+            var sqlQuery = new SqlQuery(TableName, QueryType.Delete);
             var whereAndSql =
                 string.Join(" AND ", KeySqlProperties.Select(p => string.Format("{0}.{1} = @{2}", TableName, p.ColumnName, p.PropertyName)));
 
@@ -56,7 +56,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
         /// <inheritdoc />
         public virtual SqlQuery GetDelete(Expression<Func<TEntity, bool>> predicate)
         {
-            var sqlQuery = new SqlQuery();
+            var sqlQuery = new SqlQuery(TableName, QueryType.Delete);
 
             if (!LogicalDelete)
             {

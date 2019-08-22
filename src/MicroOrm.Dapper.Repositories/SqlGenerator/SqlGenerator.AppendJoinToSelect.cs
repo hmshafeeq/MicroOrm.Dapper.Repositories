@@ -86,7 +86,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
                 joinBuilder.Append(
                     $"{joinString} {attrJoin.TableName} AS {attrJoin.TableAlias} ON {tableName}.{attrJoin.Key} = {attrJoin.TableAlias}.{attrJoin.ExternalKey} ");
 
-                if (LogicalDelete)
+                if (LogicalDelete && props.Any(s => s.PropertyName == LogicalDeleteProperty.Name))
                 {
                     bool isDateTime = LogicalDeleteProperty.PropertyType.IsDateTime();
                     joinBuilder.AppendFormat(" AND {0}.{1} {2} {3} ", attrJoin.TableAlias, LogicalDeletePropertyMetadata.ColumnName, isDateTime ? "IS" : "!=", isDateTime ? "NULL" : GetLogicalDeleteValue());

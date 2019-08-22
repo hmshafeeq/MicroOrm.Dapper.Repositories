@@ -56,14 +56,7 @@ namespace MicroOrm.Dapper.Repositories.SqlGenerator
                 CreatedAtProperty = props.FirstOrDefault(p => p.GetCustomAttributes<CreatedAtAttribute>().Any());
                 CreatedAtPropertyMetadata = new SqlPropertyMetadata(CreatedAtProperty);
             }
-
-
-            var syncStatusProperty = props.FirstOrDefault(p => p.GetCustomAttributes<SyncStatusAttribute>().Count() == 1);
-            if (syncStatusProperty != null)
-            {
-                SyncStatusProperty = props.FirstOrDefault(p => p.GetCustomAttributes<SyncStatusAttribute>().Any());
-                SyncStatusPropertyMetadata = new SqlPropertyMetadata(SyncStatusProperty);
-            }
+             
         }
     }
 }
